@@ -104,6 +104,8 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaX, pobedaY):
     return graf
 
 def unesiZidove(graf, listaZidova, m, n):
+    v_h = listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]
+    
     if(re.search(f"{m},.", listaZidova[0][0]) and v_h):
         return
     if(re.search(f".,{n}", listaZidova[0][0]) and not v_h):
@@ -197,6 +199,9 @@ listaZidova = [("2,2", "3,2")]
 pobedaX = "3,1"
 pobedaY = "4,2"
 gra = generisiGraf(4, 4, listaZidova, listaIgraca, pobedaX, pobedaY)
+
+def SetujPocetnoStanje(velicinaX, velicinaY, listaIgraca, pobedaX, pobedaY):
+    return generisiGraf(velicinaX, velicinaY, [], listaIgraca, pobedaX, pobedaY)
 
 unesiZidove(gra, listaZidova, 4, 4)
 
