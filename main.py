@@ -1,5 +1,6 @@
 import networkx as nx 
 import matplotlib.pyplot as plt
+import re
 
 
 
@@ -102,12 +103,102 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaX, pobedaY):
         graf[edge[1]] = (graf[edge[1]][0], potege)
     return graf
 
+def unesiZidove(graf, listaZidova, m, n):
+    if(re.search(f"{m},.", listaZidova[0][0]) and v_h):
+        return
+    if(re.search(f".,{n}", listaZidova[0][0]) and not v_h):
+        return
+    if(re.search(f"{m},.", listaZidova[0][1]) and v_h):
+        return
+    if(re.search(f".,{n}", listaZidova[0][1]) and not v_h):
+        return
 
+    obrisi(listaZidova,graf)
+    print(listaZidova[0][0].split(',')[0])
+    print(listaZidova[0][1].split(',')[1])
+
+    if(listaZidova[0][0].split(',')[0]==listaZidova[0][1].split(',')[0]):
+        novaLista=list()
+        x1=list(listaZidova[0][0].split(','))
+        y1=list(listaZidova[0][1].split(','))
+        x1[0]=int(x1[0])+1
+        x1[1]=int(x1[1])
+        y1[0]=int(y1[0])+1
+        y1[1]=int(y1[1])
+        novaLista=[(str(x1[0])+','+str(x1[1]),str(y1[0])+','+ str(y1[1]))]
+        obrisi(novaLista, graf)
+
+        x1=list(listaZidova[0][0].split(','))
+        y1=list(listaZidova[0][1].split(','))
+        x1[0]=int(x1[0])
+        x1[1]=int(x1[1])
+        y1[0]=int(y1[0])+1
+        y1[1]=int(y1[1])
+        novaLista=[(str(x1[0])+','+str(x1[1]),str(y1[0])+','+ str(y1[1]))]
+        obrisi(novaLista, graf)
+
+        x1=list(listaZidova[0][0].split(','))
+        y1=list(listaZidova[0][1].split(','))
+        x1[0]=int(x1[0])+1
+        x1[1]=int(x1[1])
+        y1[0]=int(y1[0])
+        y1[1]=int(y1[1])
+        novaLista=[(str(x1[0])+','+str(x1[1]),str(y1[0])+','+ str(y1[1]))]
+        obrisi(novaLista, graf)
+
+
+
+    else:
+        novaLista=list()
+        x1=list(listaZidova[0][0].split(','))
+        y1=list(listaZidova[0][1].split(','))
+        x1[0]=int(x1[0])
+        x1[1]=int(x1[1])+1
+        y1[0]=int(y1[0])
+        y1[1]=int(y1[1])+1
+        novaLista=[((str(x1[0])+','+str(x1[1]),str(y1[0])+','+ str(y1[1])))]
+        obrisi(novaLista, graf)
+
+        x1=list(listaZidova[0][0].split(','))
+        y1=list(listaZidova[0][1].split(','))
+        x1[0]=int(x1[0])
+        x1[1]=int(x1[1])
+        y1[0]=int(y1[0])
+        y1[1]=int(y1[1])+1
+        novaLista=[(str(x1[0])+','+str(x1[1]),str(y1[0])+','+ str(y1[1]))]
+        obrisi(novaLista, graf)
+
+        x1=list(listaZidova[0][0].split(','))
+        y1=list(listaZidova[0][1].split(','))
+        x1[0]=int(x1[0])+1
+        x1[1]=int(x1[1])
+        y1[0]=int(y1[0])-1
+        y1[1]=int(y1[1])+1
+        novaLista=[(str(x1[0])+','+str(x1[1]),str(y1[0])+','+ str(y1[1]))]
+        obrisi(novaLista, graf)
+
+
+def obrisi(listaZidova, graf):
+    for edge in listaZidova:
+        potege = list()
+        for potega in graf[edge[0]][1]:
+
+            if(potega != edge[1]):
+                potege.append(potega)
+        graf[edge[0]] = (graf[edge[0]][0], potege)
+        potege = list()
+        for potega in graf[edge[1]][1]:
+            if(potega!=edge[0]):
+                potege.append(potega)
+        graf[edge[1]] = (graf[edge[1]][0], potege)
+    
 listaIgraca = ["1,1","2,2", "3,3", "4,4"]
-listaZidova = [("2,1", "2,2")] 
+listaZidova = [("2,2", "3,2")] 
 pobedaX = "3,1"
 pobedaY = "4,2"
 gra = generisiGraf(4, 4, listaZidova, listaIgraca, pobedaX, pobedaY)
+
+unesiZidove(gra, listaZidova, 4, 4)
 
 lista = {}
 for i in gra:
