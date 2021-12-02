@@ -225,16 +225,39 @@ def pomeriIGraca(graf,m,n, startPoz, endPoz, naPotezu):
         return
 
     endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
+    startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
     if(endPozInt[0]>=1 and endPozInt[0]<=m and endPozInt[1]>=0 and endPozInt[1]<=n):
-#Ovde pozzvati funkciju da li je potez pravilan
-        graf[startPoz] = (0, graf[startPoz][1])
-        graf[endPoz] = (igrac, graf[endPoz][1])
+        if validacijaPokreta(graf, startPozInt):
+                graf[startPoz] = (0, graf[startPoz][1])
+                graf[endPoz] = (igrac, graf[endPoz][1])
+
+
+def validacijaPokreta(graf, trenutno, ciljno):
+
+    if(graf[ciljno][0]!= 0 or graf[ciljno][0]!="a" or graf[ciljno][0]!="b"):
+            return False
+
+
+    for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
+        g = (trenutno[0] + dx, trenutno[1] + dy)
+        if (g == ciljno):
+            return True
+
+    for tx, ty in zip([1, -1, 1, -1], [1, -1, -1 , 1]):
+        p = (trenutno[0] + dx, trenutno[1] + dy)
+        if(p==ciljno):
+            return True
+
+    return False
+
 
 listaIgraca = ["1,1","2,2", "3,3", "4,4"]
 listaZidova = [("2,2", "3,2")] 
 pobedaX = "3,1"
 pobedaY = "4,2"
 gra = generisiGraf(4, 4, listaZidova, listaIgraca, pobedaX, pobedaY)
+
+
 
 
 
