@@ -168,12 +168,15 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz):
 
 def gameLoop():
     pobeda = False
+    pattern = "[1-{M}],[1-{N}]"
     pobenik = None
     trenutniIgrac = "x"
     startnaPoz = None
     pobedaX = "3,4"
     pobedaY = "5,5"
-    graf = SetujPocetnoStanje(6, 6, ["1,1","2,2", "3,3", "4,4"], "3,4", "5,5")
+    M = 12
+    N = 14
+    graf = SetujPocetnoStanje(M, N, ["1,1","2,2", "3,3", "4,4"], "3,4", "5,5")
 
     while not pobeda:
         print("Selektujte polje sa igracem koga pomerate: ")
@@ -186,24 +189,24 @@ def gameLoop():
         zid1 = input()
         zid2 = input()
 
-        if not re.search(f"[1-6],[1-6]", zid1):
-            print("Unesite pravilno polje!")
+        if not re.search(pattern, zid1):
+            print("Unesite pravilno polje za zid1!")
             continue
 
-        if not re.search(f"[1-6],[1-6]", zid2):
-            print("Unesite pravilno polje!")
+        if not re.search(pattern, zid2):
+            print("Unesite pravilno polje za zid2!")
             continue
 
-        if not re.search(f"[1-6],[1-6]", startnaPoz):
-            print("Unesite pravilno polje!")
+        if not re.search(pattern, startnaPoz):
+            print("Unesite pravilno polje za startnu poziciju!")
             continue
 
-        if not re.search(f"[1-6],[1-6]", destinacija):
-            print("Unesite pravilno polje!")
+        if not re.search(pattern, destinacija):
+            print("Unesite pravilno polje za krajnju poziciju!")
             continue
 
-        pobeda = pomeriIGraca(graf, 6,6, startnaPoz, destinacija, trenutniIgrac, pobeda , pobedaX, pobedaY)
-        unesiZidove(graf, [(zid1, zid2)] , 6, 6)
+        pobeda = pomeriIGraca(graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda , pobedaX, pobedaY)
+        unesiZidove(graf, [(zid1, zid2)] , M, N)
         trenutniIgrac = "x" if trenutniIgrac=="y" else "y"
 
         lista = {}
