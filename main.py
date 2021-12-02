@@ -166,6 +166,16 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz):
 
     return False
 
+
+def stampajGraf(graf, M, N):
+    print("TABLA:")
+    for i in range(1, M+1):
+        vrsta = ""
+        for j in range(1, N+1):
+            vrsta += str(" "+str(graf[f"{i},{j}"][0])+" ")
+        print(vrsta)
+    print("-----------------------------------------")
+
 def gameLoop():
     pobeda = False
     pattern = "[1-{M}],[1-{N}]"
@@ -177,7 +187,7 @@ def gameLoop():
     M = 12
     N = 14
     graf = SetujPocetnoStanje(M, N, ["1,1","2,2", "3,3", "4,4"], "3,4", "5,5")
-
+    stampajGraf(graf, M, N)
     while not pobeda:
         print("Selektujte polje sa igracem koga pomerate: ")
         startnaPoz = input()
@@ -215,7 +225,7 @@ def gameLoop():
         g = nx.Graph(lista)
         nx.draw(g, with_labels=True)
         plt.show()
-        print("nesto")
+        stampajGraf(graf, M, N)
 
     print("Pobednik je : "  + "x" if trenutniIgrac=="y" else "x")
 
