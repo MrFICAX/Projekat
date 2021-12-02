@@ -1,6 +1,7 @@
 import networkx as nx 
 import matplotlib.pyplot as plt
 import re
+from queue import Queue
 
 
 
@@ -28,58 +29,79 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaX, pobedaY):
     graf = {}
     tmpM = m
     tmpN = n
-    for i in range(1, m+1):
-        for j in range(1, n+1):
-            potegList = []
-            match (i, j):
-                case (1, 1):
-                    potegList.extend([ str(i + 1) + "," + str(j),
-                              str(i) + "," + str(j + 1),
-                              str(i + 1) + "," + str(j + 1)])
-                    graf[str(i) + "," + str(j)] = (0, potegList)
+    # for i in range(1, m+1):
+    #     for j in range(1, n+1):
+    #         potegList = []
+    #         match (i, j):
+    #             case (1, 1):
+    #                 potegList.extend([ str(i + 1) + "," + str(j),
+    #                           str(i) + "," + str(j + 1),
+    #                           str(i + 1) + "," + str(j + 1)])
+    #                 graf[str(i) + "," + str(j)] = (0, potegList)
+    #
+    #             case (i, j) if (i, j) == (m,n):
+    #                 potegList.extend([str(i - 1) + "," + str(j), str(i) + "," + str(j - 1),
+    #                           str(i - 1) + "," + str(j - 1)])
+    #                 graf[str(i) + "," + str(j)] = (0, potegList)
+    #
+    #             case (1, tmpN) if (1, tmpN) == (1, n):
+    #                 potegList.extend([str(i ) + "," + str(j - 1),
+    #                           str(i + 1) + "," + str(j - 1), str(i + 1) + "," + str(j)])
+    #                 graf[str(i) + "," + str(j)] = (0, potegList)
+    #
+    #             case (tmpM, 1) if (tmpM, 1) == (m, 1):
+    #                 potegList.extend([str(i - 1) + "," + str(j),
+    #                           str(i - 1) + "," + str(j + 1), str(i) + "," + str(j + 1)])
+    #                 graf[str(i) + "," + str(j)] = (0, potegList)
+    #
+    #             case (1, j) if (1, j) == (1, j):
+    #                 potegList.extend([str(i) + "," + str(j - 1), str(i + 1) + "," + str(j),
+    #                                   str(i) + "," + str(j + 1), str(i + 1) + "," + str(j - 1),
+    #                                   str(i + 1) + "," + str(j + 1) ])
+    #                 graf[str(i) + "," + str(j)] = (0, potegList)
+    #
+    #             case (i, 1) if (i, 1) == (i, 1):
+    #                 potegList.extend([str(i + 1) + "," + str(j), str(i - 1) + "," + str(j),
+    #                                   str(i) + "," + str(j+1), str(i+1) + "," + str(j+1), str(i - 1) + "," + str(j + 1)])
+    #                 graf[str(i) + "," + str(j)] = (0, potegList)
+    #
+    #             case (tmpM, j) if (tmpM, j) == (m, j):
+    #                 potegList.extend([str(i - 1) + "," + str(j), str(i - 1) + "," + str(j - 1), str(i) + "," + str(j - 1),
+    #                                   str(i - 1) + "," + str(j + 1),
+    #                                   str(i) + "," + str(j + 1)])
+    #                 graf[str(i) + "," + str(j)] = (0, potegList)
+    #
+    #             case (i, tmpN) if (i, tmpN) == (i, n):
+    #                 potegList.extend([str(i - 1) + "," + str(j), str(i + 1) + "," + str(j - 1),
+    #                                   str(i - 1) + "," + str(j - 1), str(i - 1) + "," + str(j),
+    #                                  str(i + 1) + ',' + str(j)])
+    #                 graf[str(i) + "," + str(j)] = (0, potegList)
+    #             case _:
+    #                 potegList.extend([str(i-1) + "," + str(j - 1), str(i - 1) + "," + str(j), str(i - 1) + "," + str(j + 1), str(i) + "," + str(j+1), str(i) + "," + str(j-1), str(i + 1) + "," + str(j - 1), str(i+1) + "," + str(j), str(i+1) + "," + str(j+1)])
+    #                 graf[str(i) + "," + str(j)] = (0, potegList)
 
-                case (i, j) if (i, j) == (m,n):
-                    potegList.extend([str(i - 1) + "," + str(j), str(i) + "," + str(j - 1),
-                              str(i - 1) + "," + str(j - 1)])
-                    graf[str(i) + "," + str(j)] = (0, potegList)                              
 
-                case (1, tmpN) if (1, tmpN) == (1, n):
-                    potegList.extend([str(i ) + "," + str(j - 1),
-                              str(i + 1) + "," + str(j - 1), str(i + 1) + "," + str(j)])
-                    graf[str(i) + "," + str(j)] = (0, potegList)                              
+    start = (1, 1)
+    destinationQueue = Queue()
+    visited = set()
+    visited.add(f"{start[0]},{start[1]}")
+    destinationQueue.put(f"{start[0]},{start[1]}")
+    graf[f"{start[0]},{start[1]}"] = (0, [])
 
-                case (tmpM, 1) if (tmpM, 1) == (m, 1):
-                    potegList.extend([str(i - 1) + "," + str(j),
-                              str(i - 1) + "," + str(j + 1), str(i) + "," + str(j + 1)])
-                    graf[str(i) + "," + str(j)] = (0, potegList)                              
+    while (not destinationQueue.empty()):
+            node = destinationQueue.get()
+            childList = list()
+            nodeInt = node.split(',')
+            for dx, dy in zip([1,-1,0,0], [0,0,1,-1,]):
+                 g=(int(nodeInt[0]) + dx, int(nodeInt[1]) + dy)
+                 if(g[0]>=1 and g[0]<=m and g[1]>=1 and g[1]<=n):
+                    childList.append(f"{g[0]},{g[1]}")
+                    graf[node]=(0, childList)
+            for child in graf[node][1]:
+                if child not in visited:
+                     destinationQueue.put(child)
+                     visited.add(child)
 
-                case (1, j) if (1, j) == (1, j):
-                    potegList.extend([str(i) + "," + str(j - 1), str(i + 1) + "," + str(j),
-                                      str(i) + "," + str(j + 1), str(i + 1) + "," + str(j - 1),
-                                      str(i + 1) + "," + str(j + 1) ])
-                    graf[str(i) + "," + str(j)] = (0, potegList)                                      
-
-                case (i, 1) if (i, 1) == (i, 1):
-                    potegList.extend([str(i + 1) + "," + str(j), str(i - 1) + "," + str(j),
-                                      str(i) + "," + str(j+1), str(i+1) + "," + str(j+1), str(i - 1) + "," + str(j + 1)])
-                    graf[str(i) + "," + str(j)] = (0, potegList)                                      
-
-                case (tmpM, j) if (tmpM, j) == (m, j):
-                    potegList.extend([str(i - 1) + "," + str(j), str(i - 1) + "," + str(j - 1), str(i) + "," + str(j - 1),
-                                      str(i - 1) + "," + str(j + 1),
-                                      str(i) + "," + str(j + 1)])
-                    graf[str(i) + "," + str(j)] = (0, potegList)                                      
-
-                case (i, tmpN) if (i, tmpN) == (i, n):
-                    potegList.extend([str(i - 1) + "," + str(j), str(i + 1) + "," + str(j - 1),
-                                      str(i - 1) + "," + str(j - 1), str(i - 1) + "," + str(j),
-                                     str(i + 1) + ',' + str(j)])
-                    graf[str(i) + "," + str(j)] = (0, potegList)                                     
-                case _:
-                    potegList.extend([str(i-1) + "," + str(j - 1), str(i - 1) + "," + str(j), str(i - 1) + "," + str(j + 1), str(i) + "," + str(j+1), str(i) + "," + str(j-1), str(i + 1) + "," + str(j - 1), str(i+1) + "," + str(j), str(i+1) + "," + str(j+1)])
-                    graf[str(i) + "," + str(j)] = (0, potegList)                    
-
-            #graf[str(i) + "." + str(j)] = (0, potegList)
 
     graf[listaPoz[0]] = ('x', graf[listaPoz[0]][1])
     graf[listaPoz[1]] = ('x', graf[listaPoz[1]][1])
@@ -193,21 +215,35 @@ def obrisi(listaZidova, graf):
             if(potega!=edge[0]):
                 potege.append(potega)
         graf[edge[1]] = (graf[edge[1]][0], potege)
-    
+
+def SetujPocetnoStanje(velicinaX, velicinaY, listaIgraca, pobedaX, pobedaY):
+    return generisiGraf(velicinaX, velicinaY, [], listaIgraca, pobedaX, pobedaY)
+
+def pomeriIGraca(graf,m,n, startPoz, endPoz, naPotezu):
+    igrac = graf[startPoz][0]
+    if(igrac!=naPotezu):
+        return
+
+    endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
+    if(endPozInt[0]>=1 and endPozInt[0]<=m and endPozInt[1]>=0 and endPozInt[1]<=n):
+#Ovde pozzvati funkciju da li je potez pravilan
+        graf[startPoz] = (0, graf[startPoz][1])
+        graf[endPoz] = (igrac, graf[endPoz][1])
+
 listaIgraca = ["1,1","2,2", "3,3", "4,4"]
 listaZidova = [("2,2", "3,2")] 
 pobedaX = "3,1"
 pobedaY = "4,2"
 gra = generisiGraf(4, 4, listaZidova, listaIgraca, pobedaX, pobedaY)
 
-def SetujPocetnoStanje(velicinaX, velicinaY, listaIgraca, pobedaX, pobedaY):
-    return generisiGraf(velicinaX, velicinaY, [], listaIgraca, pobedaX, pobedaY)
+
 
 unesiZidove(gra, listaZidova, 4, 4)
-
+pomeriIGraca(gra, 6, 6, "1,1", "2,1", "x")
 lista = {}
 for i in gra:
     lista[i] = (gra[i][1])
 g = nx.Graph(lista)
 nx.draw(g, with_labels = True)
 plt.show()
+print("Kraj!")
