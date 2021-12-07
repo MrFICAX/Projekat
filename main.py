@@ -80,13 +80,13 @@ def unesiZidove(graf, listaZidova, m, n):
     v_h = listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]
     
     if(re.search(f"{m},.", listaZidova[0][0]) and v_h):
-        return
+        return False
     if(re.search(f".,{n}", listaZidova[0][0]) and not v_h):
-        return
+        return False
     if(re.search(f"{m},.", listaZidova[0][1]) and v_h):
-        return
+        return False
     if(re.search(f".,{n}", listaZidova[0][1]) and not v_h):
-        return
+        return False
 
     obrisi(listaZidova,graf)
     print(listaZidova[0][0].split(',')[0])
@@ -103,6 +103,7 @@ def unesiZidove(graf, listaZidova, m, n):
         pomocnoBrisanje(0,0,0,1, listaZidova, graf)
         pomocnoBrisanje(1,0,-1,1, listaZidova, graf)
 
+    return True
 def pomocnoBrisanje(a, b, c, d, listaZidova, graf):
     x1 = list(listaZidova[0][0].split(','))
     y1 = list(listaZidova[0][1].split(','))
@@ -134,36 +135,44 @@ def SetujPocetnoStanje(velicinaX, velicinaY, listaIgraca, pobedaX, pobedaY):
 def pomeriIGraca(graf,m,n, startPoz, endPoz, naPotezu, pobeda, px, py):
     igrac = graf[startPoz][0]
     if(igrac!=naPotezu):
-        return
+        return (False, False)
 
     endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
     startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
     if(endPozInt[0]>=1 and endPozInt[0]<=m and endPozInt[1]>=0 and endPozInt[1]<=n):
-        if validacijaPokreta(graf, startPozInt, endPozInt, endPoz):
+        if validacijaPokreta(graf, startPozInt, endPozInt, endPoz, startPoz):
                 if endPoz==px and naPotezu == "x":
                     pobeda = True
                 elif endPoz == py and naPotezu=='y':
                     pobeda = True
                 graf[startPoz] = (0, graf[startPoz][1])
                 graf[endPoz] = (igrac, graf[endPoz][1])
-    return pobeda
 
-def validacijaPokreta(graf, trenutno, ciljno, endpoz):
+    ret =(pobeda, validacijaPokreta(graf, startPozInt, endPozInt, endPoz, startPoz))
+    return ret
+
+def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):
 
     if(graf[endpoz][0] == "x" or graf[endpoz][0] == "y"):
-            return False
+            return (False, False)
 
 
     for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
         g = (trenutno[0] + dx, trenutno[1] + dy)
         if (g == ciljno):
-            return True
+            for node in graf[startPoz][1]:
+                for child in graf[node][1]:
+                    if child[0] == node[0] or child[1] == node[1]:
+                        if(child == endpoz):
+                          return True
 
     for tx, ty in zip([1, -1, 1, -1], [1, -1, -1 , 1]):
         p = (trenutno[0] + tx, trenutno[1] + ty)
         if(p==ciljno):
-            return True
-
+            for node in graf[startPoz][1]:
+                if(node == endpoz):
+                    return True
+    print("Nije moguce pomeriti igraca n ovo polje!")
     return False
 
 
@@ -215,10 +224,16 @@ def gameLoop():
             print("Unesite pravilno polje za krajnju poziciju!")
             continue
 
-        pobeda = pomeriIGraca(graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda , pobedaX, pobedaY)
-        unesiZidove(graf, [(zid1, zid2)] , M, N)
+        pobedaPravilnoTuple = pomeriIGraca(graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda , pobedaX, pobedaY)
+        if(not pobedaPravilnoTuple[1]):
+            print("Nepravilno kretanje!")
+            continue
+        validanZid = unesiZidove(graf, [(zid1, zid2)] , M, N)
+        if not validanZid:
+            print("Nepravilno unesen zid")
+            continue
         trenutniIgrac = "x" if trenutniIgrac=="y" else "y"
-
+        pobeda = pobedaPravilnoTuple[0]
         lista = {}
         for i in graf:
             lista[i] = (graf[i][1])
@@ -227,7 +242,7 @@ def gameLoop():
         plt.show()
         stampajGraf(graf, M, N)
 
-    print("Pobednik je : "  + "x" if trenutniIgrac=="y" else "x")
+    print("Pobednik je : "  + "x" if trenutniIgrac=="y" else "y")
 
 
 # listaIgraca = ["1,1","2,2", "3,3", "4,4"]
