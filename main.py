@@ -1,8 +1,7 @@
-import networkx as nx 
+import networkx as nx
 import matplotlib.pyplot as plt
 import re
 from queue import Queue
-
 
 
 # graf = {
@@ -21,7 +20,7 @@ from queue import Queue
 #
 #
 
-#Guards
+# Guards
 # https://stackoverflow.com/questions/66159432/how-to-use-values-stored-in-variables-as-case-patterns
 # [A] guard is an arbitrary expression attached to a pattern and that must evaluate to a "truthy" value for the pattern to succeed.
 
@@ -29,8 +28,6 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaX, pobedaY):
     graf = {}
     tmpM = m
     tmpN = n
-
-
 
     start = (1, 1)
     destinationQueue = Queue()
@@ -40,19 +37,18 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaX, pobedaY):
     graf[f"{start[0]},{start[1]}"] = (0, [])
 
     while (not destinationQueue.empty()):
-            node = destinationQueue.get()
-            childList = list()
-            nodeInt = node.split(',')
-            for dx, dy in zip([1,-1,0,0, 1,1,-1,-1], [0,0,1,-1,1,-1,1,-1]):
-                 g=(int(nodeInt[0]) + dx, int(nodeInt[1]) + dy)
-                 if(g[0]>=1 and g[0]<=m and g[1]>=1 and g[1]<=n):
-                    childList.append(f"{g[0]},{g[1]}")
-                    graf[node]=(0, childList)
-            for child in graf[node][1]:
-                if child not in visited:
-                     destinationQueue.put(child)
-                     visited.add(child)
-
+        node = destinationQueue.get()
+        childList = list()
+        nodeInt = node.split(',')
+        for dx, dy in zip([1, -1, 0, 0, 1, 1, -1, -1], [0, 0, 1, -1, 1, -1, 1, -1]):
+            g = (int(nodeInt[0]) + dx, int(nodeInt[1]) + dy)
+            if(g[0] >= 1 and g[0] <= m and g[1] >= 1 and g[1] <= n):
+                childList.append(f"{g[0]},{g[1]}")
+                graf[node] = (0, childList)
+        for child in graf[node][1]:
+            if child not in visited:
+                destinationQueue.put(child)
+                visited.add(child)
 
     graf[listaPoz[0]] = ('x', graf[listaPoz[0]][1])
     graf[listaPoz[1]] = ('x', graf[listaPoz[1]][1])
@@ -71,14 +67,15 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaX, pobedaY):
         graf[edge[0]] = (graf[edge[0]][0], potege)
         potege = list()
         for potega in graf[edge[1]][1]:
-            if(potega!=edge[0]):
+            if(potega != edge[0]):
                 potege.append(potega)
         graf[edge[1]] = (graf[edge[1]][0], potege)
     return graf
 
+
 def unesiZidove(graf, listaZidova, m, n):
     v_h = listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]
-    
+
     if(re.search(f"{m},.", listaZidova[0][0]) and v_h):
         return False
     if(re.search(f".,{n}", listaZidova[0][0]) and not v_h):
@@ -88,22 +85,23 @@ def unesiZidove(graf, listaZidova, m, n):
     if(re.search(f".,{n}", listaZidova[0][1]) and not v_h):
         return False
 
-    obrisi(listaZidova,graf)
+    obrisi(listaZidova, graf)
     print(listaZidova[0][0].split(',')[0])
     print(listaZidova[0][1].split(',')[1])
 
-    if(listaZidova[0][0].split(',')[0]==listaZidova[0][1].split(',')[0]):
-        pomocnoBrisanje(1,0,1,0, listaZidova, graf)
-        pomocnoBrisanje(0,0,1,0, listaZidova, graf)
-        pomocnoBrisanje(1,0,0,0, listaZidova, graf)
-
+    if(listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]):
+        pomocnoBrisanje(1, 0, 1, 0, listaZidova, graf)
+        pomocnoBrisanje(0, 0, 1, 0, listaZidova, graf)
+        pomocnoBrisanje(1, 0, 0, 0, listaZidova, graf)
 
     else:
-        pomocnoBrisanje(0,1,0,1, listaZidova, graf)
-        pomocnoBrisanje(0,0,0,1, listaZidova, graf)
-        pomocnoBrisanje(1,0,-1,1, listaZidova, graf)
+        pomocnoBrisanje(0, 1, 0, 1, listaZidova, graf)
+        pomocnoBrisanje(0, 0, 0, 1, listaZidova, graf)
+        pomocnoBrisanje(1, 0, -1, 1, listaZidova, graf)
 
     return True
+
+
 def pomocnoBrisanje(a, b, c, d, listaZidova, graf):
     x1 = list(listaZidova[0][0].split(','))
     y1 = list(listaZidova[0][1].split(','))
@@ -111,7 +109,8 @@ def pomocnoBrisanje(a, b, c, d, listaZidova, graf):
     x1[1] = int(x1[1]) + b
     y1[0] = int(y1[0]) + c
     y1[1] = int(y1[1]) + d
-    novaLista = [(str(x1[0]) + ',' + str(x1[1]), str(y1[0]) + ',' + str(y1[1]))]
+    novaLista = [(str(x1[0]) + ',' + str(x1[1]),
+                  str(y1[0]) + ',' + str(y1[1]))]
     obrisi(novaLista, graf)
 
 
@@ -125,65 +124,101 @@ def obrisi(listaZidova, graf):
         graf[edge[0]] = (graf[edge[0]][0], potege)
         potege = list()
         for potega in graf[edge[1]][1]:
-            if(potega!=edge[0]):
+            if(potega != edge[0]):
                 potege.append(potega)
         graf[edge[1]] = (graf[edge[1]][0], potege)
+
 
 def SetujPocetnoStanje(velicinaX, velicinaY, listaIgraca, pobedaX, pobedaY):
     return generisiGraf(velicinaX, velicinaY, [], listaIgraca, pobedaX, pobedaY)
 
-def pomeriIGraca(graf,m,n, startPoz, endPoz, naPotezu, pobeda, px, py):
+
+def pomeriIGraca(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px, py):
     igrac = graf[startPoz][0]
-    if(igrac!=naPotezu):
+    if(igrac != naPotezu):
         return (False, False)
 
     endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
     startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
-    if(endPozInt[0]>=1 and endPozInt[0]<=m and endPozInt[1]>=0 and endPozInt[1]<=n):
+    if(endPozInt[0] >= 1 and endPozInt[0] <= m and endPozInt[1] >= 0 and endPozInt[1] <= n):
         if validacijaPokreta(graf, startPozInt, endPozInt, endPoz, startPoz):
-                if endPoz==px and naPotezu == "x":
-                    pobeda = True
-                elif endPoz == py and naPotezu=='y':
-                    pobeda = True
-                graf[startPoz] = (0, graf[startPoz][1])
-                graf[endPoz] = (igrac, graf[endPoz][1])
+            if endPoz == px and naPotezu == "x":
+                pobeda = True
+            elif endPoz == py and naPotezu == 'y':
+                pobeda = True
+            graf[startPoz] = (0, graf[startPoz][1])
+            graf[endPoz] = (igrac, graf[endPoz][1])
 
-    ret =(pobeda, validacijaPokreta(graf, startPozInt, endPozInt, endPoz, startPoz))
+    ret = (pobeda, validacijaPokreta(
+        graf, startPozInt, endPozInt, endPoz, startPoz))
     return ret
+
 
 def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):
 
     if(graf[endpoz][0] == "x" or graf[endpoz][0] == "y"):
-            return (False, False)
-
+        return (False, False)
 
     for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
         g = (trenutno[0] + dx, trenutno[1] + dy)
         if (g == ciljno):
             for node in graf[startPoz][1]:
+                if(node.split(",")[0] != startPoz.split(",")[0] and node.split(",")[1] != startPoz.split(",")[1]):
+                    continue
                 for child in graf[node][1]:
-                    if child[0] == node[0] or child[1] == node[1]:
-                        if(child == endpoz):
-                          return True
+                    if(child.split(",")[0] != node.split(",")[0] and child.split(",")[1] != node.split(",")[1]):
+                        continue
+                    else:
+                        if child[0] == node[0] or child[1] == node[1]:
+                            if(child == endpoz):
+                                return True
 
-    for tx, ty in zip([1, -1, 1, -1], [1, -1, -1 , 1]):
+    for tx, ty in zip([1, -1, 1, -1], [1, -1, -1, 1]):
         p = (trenutno[0] + tx, trenutno[1] + ty)
-        if(p==ciljno):
+        if(p == ciljno):
             for node in graf[startPoz][1]:
                 if(node == endpoz):
                     return True
-    print("Nije moguce pomeriti igraca n ovo polje!")
+    print("Nije moguce pomeriti igraca na ovo polje!")
     return False
 
 
 def stampajGraf(graf, M, N):
     print("TABLA:")
+    brojevi = "    "
+    for j in range(1, N+1):
+        if(j > 9):
+            brojevi += str(j) + "   "
+        else:
+            brojevi += str(j) + "    "
+    print(brojevi)
+    vrsta = ""
     for i in range(1, M+1):
-        vrsta = ""
+        if(i < 10):
+            vrsta = str(i) + "   "
+            horizontalniZidovi = "    "
+
+        else:
+            vrsta = str(i) + "  "
+            horizontalniZidovi = "   "
+
         for j in range(1, N+1):
-            vrsta += str(" "+str(graf[f"{i},{j}"][0])+" ")
+            zid = ""
+
+            if(f"{i},{j+1}" in graf[f"{i},{j}"][1]):
+                zid = "  "
+            elif j != N:
+                zid = "||"
+            if(f"{i+1},{j}" in graf[f"{i},{j}"][1]):
+                horizontalniZidovi += "     "
+            elif i != M:
+                horizontalniZidovi += "=    "
+            vrsta += str(""+str(graf[f"{i},{j}"][0])+" "+zid+" ")
+
         print(vrsta)
+        print(horizontalniZidovi)
     print("-----------------------------------------")
+
 
 def gameLoop():
     pobeda = False
@@ -195,9 +230,9 @@ def gameLoop():
     pobedaY = "5,5"
     M = 12
     N = 14
-    graf = SetujPocetnoStanje(M, N, ["1,1","2,2", "3,3", "4,4"], "3,4", "5,5")
+    graf = SetujPocetnoStanje(M, N, ["1,1", "2,2", "3,3", "4,4"], "3,4", "5,5")
     stampajGraf(graf, M, N)
-    while not pobeda:
+    while True:
         print("Selektujte polje sa igracem koga pomerate: ")
         startnaPoz = input()
 
@@ -224,16 +259,19 @@ def gameLoop():
             print("Unesite pravilno polje za krajnju poziciju!")
             continue
 
-        pobedaPravilnoTuple = pomeriIGraca(graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda , pobedaX, pobedaY)
+        pobedaPravilnoTuple = pomeriIGraca(
+            graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda, pobedaX, pobedaY)
         if(not pobedaPravilnoTuple[1]):
             print("Nepravilno kretanje!")
             continue
-        validanZid = unesiZidove(graf, [(zid1, zid2)] , M, N)
+        validanZid = unesiZidove(graf, [(zid1, zid2)], M, N)
         if not validanZid:
             print("Nepravilno unesen zid")
             continue
-        trenutniIgrac = "x" if trenutniIgrac=="y" else "y"
-        pobeda = pobedaPravilnoTuple[0]
+        trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
+        #pobeda = pobedaPravilnoTuple[0]
+        if proveriPobednika(pobedaPravilnoTuple[0]):
+            break
         lista = {}
         for i in graf:
             lista[i] = (graf[i][1])
@@ -242,7 +280,11 @@ def gameLoop():
         plt.show()
         stampajGraf(graf, M, N)
 
-    print("Pobednik je : "  + "x" if trenutniIgrac=="y" else "y")
+    print("Pobednik je : " + "x" if trenutniIgrac == "y" else "y")
+
+
+def proveriPobednika(flag):
+    return flag
 
 
 # listaIgraca = ["1,1","2,2", "3,3", "4,4"]
