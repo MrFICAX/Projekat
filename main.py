@@ -24,7 +24,7 @@ from queue import Queue
 # https://stackoverflow.com/questions/66159432/how-to-use-values-stored-in-variables-as-case-patterns
 # [A] guard is an arbitrary expression attached to a pattern and that must evaluate to a "truthy" value for the pattern to succeed.
 
-def generisiGraf(m, n, nizZidova, listaPoz, pobedaX, pobedaY):
+def generisiGraf(m, n, nizZidova, listaPoz, pobedaA1, pobedaA2, pobedaB1, pobedaB2):  # veljko
     graf = {}
     tmpM = m
     tmpN = n
@@ -55,8 +55,11 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaX, pobedaY):
     graf[listaPoz[2]] = ('y', graf[listaPoz[2]][1])
     graf[listaPoz[3]] = ('y',  graf[listaPoz[3]][1])
 
-    graf[pobedaX] = ('a', graf[pobedaX][1])
-    graf[pobedaY] = ('b', graf[pobedaY][1])
+    graf[pobedaA1] = ('a', graf[pobedaA1][1])
+    graf[pobedaB1] = ('b', graf[pobedaB1][1])
+
+    graf[pobedaA2] = ('a', graf[pobedaA2][1])
+    graf[pobedaB2] = ('b', graf[pobedaB2][1])
 
     for edge in nizZidova:
         potege = list()
@@ -73,7 +76,7 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaX, pobedaY):
     return graf
 
 
-def unesiZidove(graf, listaZidova, m, n):
+def unesiZidove(graf, listaZidova, m, n):  # zeljko
     v_h = listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]
 
     if(re.search(f"{m},.", listaZidova[0][0]) and v_h):
@@ -102,7 +105,7 @@ def unesiZidove(graf, listaZidova, m, n):
     return True
 
 
-def pomocnoBrisanje(a, b, c, d, listaZidova, graf):
+def pomocnoBrisanje(a, b, c, d, listaZidova, graf):  # zeljko
     x1 = list(listaZidova[0][0].split(','))
     y1 = list(listaZidova[0][1].split(','))
     x1[0] = int(x1[0]) + a
@@ -114,7 +117,7 @@ def pomocnoBrisanje(a, b, c, d, listaZidova, graf):
     obrisi(novaLista, graf)
 
 
-def obrisi(listaZidova, graf):
+def obrisi(listaZidova, graf):  # zeljko
     for edge in listaZidova:
         potege = list()
         for potega in graf[edge[0]][1]:
@@ -129,11 +132,11 @@ def obrisi(listaZidova, graf):
         graf[edge[1]] = (graf[edge[1]][0], potege)
 
 
-def SetujPocetnoStanje(velicinaX, velicinaY, listaIgraca, pobedaX, pobedaY):
-    return generisiGraf(velicinaX, velicinaY, [], listaIgraca, pobedaX, pobedaY)
+def SetujPocetnoStanje(velicinaX, velicinaY, listaIgraca, pobedaA1, pobedaA2, pobedaB1, pobedaB2):  # veljko
+    return generisiGraf(velicinaX, velicinaY, [], listaIgraca, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
 
 
-def pomeriIGraca(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px, py):
+def pomeriIGraca(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px1, px2, py1, py2):  # veljko
     igrac = graf[startPoz][0]
     if(igrac != naPotezu):
         return (False, False)
@@ -141,23 +144,24 @@ def pomeriIGraca(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px, py):
     endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
     startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
     if(endPozInt[0] >= 1 and endPozInt[0] <= m and endPozInt[1] >= 0 and endPozInt[1] <= n):
-        if validacijaPokreta(graf, startPozInt, endPozInt, endPoz, startPoz):
-            if endPoz == px and naPotezu == "x":
+        ValidiranPokret = validacijaPokreta(graf, startPozInt, endPozInt, endPoz, startPoz)
+        if ValidiranPokret:
+            if (endPoz == px1 or endPoz == px2) and naPotezu == "x":
                 pobeda = True
-            elif endPoz == py and naPotezu == 'y':
+            elif (endPoz == py1 or endPoz == py2) and naPotezu == 'y':
                 pobeda = True
             graf[startPoz] = (0, graf[startPoz][1])
             graf[endPoz] = (igrac, graf[endPoz][1])
-
-    ret = (pobeda, validacijaPokreta(
-        graf, startPozInt, endPozInt, endPoz, startPoz))
+    else:
+        ValidiranPokret = False
+    ret = (pobeda, ValidiranPokret)
     return ret
 
 
-def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):
+def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):  # filip
 
     if(graf[endpoz][0] == "x" or graf[endpoz][0] == "y"):
-        return (False, False)
+        return False
 
     for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
         g = (trenutno[0] + dx, trenutno[1] + dy)
@@ -179,11 +183,11 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):
             for node in graf[startPoz][1]:
                 if(node == endpoz):
                     return True
-    print("Nije moguce pomeriti igraca na ovo polje!")
+    print("Nije moguce pomeriti igraca na ovo polje! Mozete se kretati 2 polja po horizontali i vertikali, a 1 polje po dijagonali!")
     return False
 
 
-def stampajGraf(graf, M, N):
+def stampajGraf(graf, M, N):  # filip
     print("TABLA:")
     brojevi = "    "
     for j in range(1, N+1):
@@ -194,13 +198,12 @@ def stampajGraf(graf, M, N):
     print(brojevi)
     vrsta = ""
     for i in range(1, M+1):
+        horizontalniZidovi = "    "
         if(i < 10):
             vrsta = str(i) + "   "
-            horizontalniZidovi = "    "
 
         else:
             vrsta = str(i) + "  "
-            horizontalniZidovi = "   "
 
         for j in range(1, N+1):
             zid = ""
@@ -220,19 +223,40 @@ def stampajGraf(graf, M, N):
     print("-----------------------------------------")
 
 
-def gameLoop():
+def gameLoop():  # filip
+
+    print("Unesite M velicinu table (broj vrsta): ")
+    M = int(input())
+    print("Unesite N velicinu table (broj kolona): ")
+    N = int(input())
+
+    print("Unesite broj zidova koje poseduje svaki igrac: ")
+    BrojZidova = 2 * int(input())
+
     pobeda = False
     pattern = "[1-{M}],[1-{N}]"
     pobenik = None
     trenutniIgrac = "x"
     startnaPoz = None
-    pobedaX = "3,4"
-    pobedaY = "5,5"
-    M = 12
-    N = 14
-    graf = SetujPocetnoStanje(M, N, ["1,1", "2,2", "3,3", "4,4"], "3,4", "5,5")
+    A1x = int(M/3)
+    A1y = int(N/3)
+    A2x = int(2*M/3)
+    A2y = int(N/3)
+    B1x = int(M/3)
+    B1y = int(2*N/3)
+    B2x = int(2*M/3)
+    B2y = int(2*N/3)
+    pobedaA1 = f"{A1x},{A1y}"
+    pobedaB1 = f"{A2x},{A2y}"
+    pobedaA2 = f"{B1x},{B1y}"
+    pobedaB2 = f"{B2x},{B2y}"
+    # M = 12
+    # N = 14
+    graf = SetujPocetnoStanje(
+        M, N, ["1,1", "2,2", "3,3", "4,4"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
     while True:
+        print(f"NA POTEZU JE IGRAC {trenutniIgrac}: ")
         print("Selektujte polje sa igracem koga pomerate: ")
         startnaPoz = input()
 
@@ -260,9 +284,9 @@ def gameLoop():
             continue
 
         pobedaPravilnoTuple = pomeriIGraca(
-            graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda, pobedaX, pobedaY)
+            graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda, pobedaA1, pobedaB1, pobedaA2, pobedaB2)
         if(not pobedaPravilnoTuple[1]):
-            print("Nepravilno kretanje!")
+            print(f"Nepravilno kretanje, na potezu je {trenutniIgrac}!")
             continue
         validanZid = unesiZidove(graf, [(zid1, zid2)], M, N)
         if not validanZid:
@@ -272,18 +296,18 @@ def gameLoop():
         #pobeda = pobedaPravilnoTuple[0]
         if proveriPobednika(pobedaPravilnoTuple[0]):
             break
-        lista = {}
-        for i in graf:
-            lista[i] = (graf[i][1])
-        g = nx.Graph(lista)
-        nx.draw(g, with_labels=True)
-        plt.show()
+        # lista = {}
+        # for i in graf:
+        #     lista[i] = (graf[i][1])
+        # g = nx.Graph(lista)
+        # nx.draw(g, with_labels=True)
+        # plt.show()
         stampajGraf(graf, M, N)
 
     print("Pobednik je : " + "x" if trenutniIgrac == "y" else "y")
 
 
-def proveriPobednika(flag):
+def proveriPobednika(flag):  # filip
     return flag
 
 
