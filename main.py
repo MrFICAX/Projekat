@@ -189,21 +189,24 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):  # filip
 
 def stampajGraf(graf, M, N):  # filip
     print("TABLA:")
-    brojevi = "    "
+    brojevi = "  | "
+    okvirHorizontalni = "----"
     for j in range(1, N+1):
         if(j > 9):
             brojevi += str(j) + "   "
+            okvirHorizontalni += "-----"
         else:
             brojevi += str(j) + "    "
+            okvirHorizontalni += "-----"
     print(brojevi)
+    print(okvirHorizontalni)
     vrsta = ""
     for i in range(1, M+1):
         horizontalniZidovi = "    "
         if(i < 10):
-            vrsta = str(i) + "   "
-
+            vrsta = str(i) + " | "
         else:
-            vrsta = str(i) + "  "
+            vrsta = str(i) + "| "
 
         for j in range(1, N+1):
             zid = ""
@@ -234,7 +237,7 @@ def gameLoop():  # filip
     BrojZidova = 2 * int(input())
 
     pobeda = False
-    pattern = "[1-{M}],[1-{N}]"
+    pattern = "[1-{M}|10],[1-{N}|10]"
     pobenik = None
     trenutniIgrac = "x"
     startnaPoz = None
@@ -253,8 +256,9 @@ def gameLoop():  # filip
     # M = 12
     # N = 14
     graf = SetujPocetnoStanje(
-        M, N, ["1,1", "2,2", "3,3", "4,4"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
+        M, N, ["1,1", "4,5", "3,3", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
+    print(graf)
     while True:
         print(f"NA POTEZU JE IGRAC {trenutniIgrac}: ")
         print("Selektujte polje sa igracem koga pomerate: ")
