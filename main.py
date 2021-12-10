@@ -81,12 +81,12 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
     v_h = listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]
 
     if v_h:
-        if(str((int(listaZidova[0][0].split(',')[0])+1)+','+listaZidova[0][0].split(',')[1]) in graf[listaZidova[0][0]][1]):
-            if(str((int(listaZidova[0][1].split(',')[0])+1)+','+listaZidova[0][1].split(',')[1]) in graf[listaZidova[0][1]][1]):
+        if(str(str((int(listaZidova[0][0].split(',')[0])+1))+','+listaZidova[0][0].split(',')[1]) not in graf[listaZidova[0][0]][1]):
+            if(str(str(int(listaZidova[0][1].split(',')[0])+1)+','+listaZidova[0][1].split(',')[1]) not in graf[listaZidova[0][1]][1]):
                 return False
     else:
-        if(str((int(listaZidova[0][0].split(',')[0])+1)+','+(int(listaZidova[0][1].split(',')[1])+1)) in graf[listaZidova[0][0]][1]):
-            if(str((listaZidova[0][1].split(',')[0])+','+(int(listaZidova[0][1].split(',')[1])+1)) in graf[listaZidova[0][1]][1]):
+        if(str((str(int(listaZidova[0][0].split(',')[0])))+','+str((int(listaZidova[0][1].split(',')[1])+1))) not in graf[listaZidova[0][0]][1]):
+            if(str((listaZidova[0][1].spl10it(',')[0])+','+(int(listaZidova[0][1].split(',')[1]+1))) not in graf[listaZidova[0][1]][1]):
                 return False
 
 
