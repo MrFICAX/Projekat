@@ -77,7 +77,19 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaA1, pobedaA2, pobedaB1, pobeda
 
 
 def unesiZidove(graf, listaZidova, m, n):  # zeljko
+
     v_h = listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]
+
+    if v_h:
+        if(str((int(listaZidova[0][0].split(',')[0])+1)+','+listaZidova[0][0].split(',')[1]) in graf[listaZidova[0][0]][1]):
+            if(str((int(listaZidova[0][1].split(',')[0])+1)+','+listaZidova[0][1].split(',')[1]) in graf[listaZidova[0][1]][1]):
+                return False
+    else:
+        if(str((int(listaZidova[0][0].split(',')[0])+1)+','+(int(listaZidova[0][1].split(',')[1])+1)) in graf[listaZidova[0][0]][1]):
+            if(str((listaZidova[0][1].split(',')[0])+','+(int(listaZidova[0][1].split(',')[1])+1)) in graf[listaZidova[0][1]][1]):
+                return False
+
+
 
     if(re.search(f"{m},.", listaZidova[0][0]) and v_h):
         return False
@@ -121,7 +133,6 @@ def obrisi(listaZidova, graf):  # zeljko
     for edge in listaZidova:
         potege = list()
         for potega in graf[edge[0]][1]:
-
             if(potega != edge[1]):
                 potege.append(potega)
         graf[edge[0]] = (graf[edge[0]][0], potege)
