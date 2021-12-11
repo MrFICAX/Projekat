@@ -88,9 +88,7 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         if(str((str(int(listaZidova[0][0].split(',')[0])))+','+str((int(listaZidova[0][1].split(',')[1])+1))) not in graf[listaZidova[0][0]][1]):
             if(str(listaZidova[0][1].split(',')[0]+','+str(int(listaZidova[0][1].split(',')[1])+1)) not in graf[listaZidova[0][1]][1]):
                 return False
-
-
-
+                
     if(re.search(f"{m},.", listaZidova[0][0]) and v_h):
         return False
     if(re.search(f".,{n}", listaZidova[0][0]) and not v_h):
@@ -308,7 +306,7 @@ def gameLoop():  # filip
             continue
         trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
         #pobeda = pobedaPravilnoTuple[0]
-        if proveriPobednika(pobedaPravilnoTuple[0]):
+        if proveriPobednika(pobedaPravilnoTuple):
             break
         # lista = {}
         # for i in graf:
@@ -321,18 +319,8 @@ def gameLoop():  # filip
     print("Pobednik je : " + "x" if trenutniIgrac == "y" else "y")
 
 
-def proveriPobednika(flag):  # filip
-    return flag
-
-
-# listaIgraca = ["1,1","2,2", "3,3", "4,4"]
-# listaZidova = []
-# pobedaX = "3,1"
-# pobedaY = "4,2"
-# gra = generisiGraf(4, 4, listaZidova, listaIgraca, pobedaX, pobedaY)
+def proveriPobednika(pobedaPravilnoTuple):  # filip
+    return pobedaPravilnoTuple[0]
 
 
 gameLoop()
-
-
-print("Kraj!")
