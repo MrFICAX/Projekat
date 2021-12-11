@@ -86,7 +86,7 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
                 return False
     else:
         if(str((str(int(listaZidova[0][0].split(',')[0])))+','+str((int(listaZidova[0][1].split(',')[1])+1))) not in graf[listaZidova[0][0]][1]):
-            if(str((listaZidova[0][1].spl10it(',')[0])+','+(int(listaZidova[0][1].split(',')[1]+1))) not in graf[listaZidova[0][1]][1]):
+            if(str(listaZidova[0][1].split(',')[0]+','+str(int(listaZidova[0][1].split(',')[1])+1)) not in graf[listaZidova[0][1]][1]):
                 return False
 
 
@@ -269,7 +269,6 @@ def gameLoop():  # filip
     graf = SetujPocetnoStanje(
         M, N, ["1,1", "4,5", "3,3", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
-    print(graf)
     while True:
         print(f"NA POTEZU JE IGRAC {trenutniIgrac}: ")
         print("Selektujte polje sa igracem koga pomerate: ")
