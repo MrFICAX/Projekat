@@ -192,7 +192,7 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):  # filip
             for node in graf[startPoz][1]:
                 if(node == endpoz):
                     return True
-    print("Nije moguce pomeriti igraca na ovo polje! Mozete se kretati 2 polja po horizontali i vertikali, a 1 polje po dijagonali!")
+    print("Nije moguce pomeriti igraca na ovo polje! Postoji zid ili ste uneli nevalidnu vrednost")
     return False
 
 
@@ -275,17 +275,18 @@ def gameLoop():  # filip
         print("Na koje polje: ")
         destinacija = input()
 
-        print("Unesite gde postavljate zid: ")
-        zid1 = input()
-        zid2 = input()
+        if BrojZidova > 0:
+            print("Unesite gde postavljate zid: ")
+            zid1 = input()
+            zid2 = input()
 
-        if not re.search(pattern, zid1):
-            print("Unesite pravilno polje za zid1!")
-            continue
+            if not re.search(pattern, zid1):
+                print("Unesite pravilno polje za zid1!")
+                continue
 
-        if not re.search(pattern, zid2):
-            print("Unesite pravilno polje za zid2!")
-            continue
+            if not re.search(pattern, zid2):
+                print("Unesite pravilno polje za zid2!")
+                continue
 
         if not re.search(pattern, startnaPoz):
             print("Unesite pravilno polje za startnu poziciju!")
@@ -300,11 +301,13 @@ def gameLoop():  # filip
         if(not pobedaPravilnoTuple[1]):
             print(f"Nepravilno kretanje, na potezu je {trenutniIgrac}!")
             continue
-        validanZid = unesiZidove(graf, [(zid1, zid2)], M, N)
-        if not validanZid:
-            print("Nepravilno unesen zid")
-            continue
+        if BrojZidova > 0:
+            validanZid = unesiZidove(graf, [(zid1, zid2)], M, N)
+            if not validanZid:
+                print("Nepravilno unesen zid")
+                continue
         trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
+        BrojZidova -= 1
         #pobeda = pobedaPravilnoTuple[0]
         if proveriPobednika(pobedaPravilnoTuple):
             break
