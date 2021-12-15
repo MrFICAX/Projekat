@@ -234,6 +234,50 @@ def stampajGraf(graf, M, N):  # filip
         print(horizontalniZidovi)
     print("-----------------------------------------")
 
+def isClosedPath(pobedaPozicije, graph):
+    igracCounterX=0
+    igracCounterY=0
+
+    ciljniCvorovi = Queue(4)
+    start = pobedaPozicije[0]
+    destinationQueue = Queue(len(graph))
+    visited = set()
+    visited.add(start)
+    destinationQueue.put(start)
+    for i in range(0,2):
+        if pobedaPozicije[i] not in ciljniCvorovi:
+            ciljniCvorovi.put(pobedaPozicije[i])
+            while (not destinationQueue.empty()):
+             node = destinationQueue.get()
+             if(graph[node][0]=='x'):
+                igracCounterX+=1
+                if(node == pobedaPozicije[1]):
+                   ciljniCvorovi.put(node)
+                for child in graph[node]:
+                  if child not in visited:
+                    destinationQueue.put(child)
+                    visited.add(child)
+        if(igracCounterX<2):
+            return False
+
+    for i in range(2,4):
+        if pobedaPozicije[i] not in ciljniCvorovi:
+            ciljniCvorovi.put(pobedaPozicije[i])
+            while (not destinationQueue.empty()):
+             node = destinationQueue.get()
+             if(graph[node][0]=='y'):
+                igracCounterY+=1
+                if(node == pobedaPozicije[1]):
+                   ciljniCvorovi.put(node)
+                for child in graph[node]:
+                  if child not in visited:
+                        destinationQueue.put(child)
+                       visited.add(child)
+        if(igracCounterY<2):
+            return False
+    return True
+
+
 
 def gameLoop():  # filip
 
@@ -302,10 +346,16 @@ def gameLoop():  # filip
             print(f"Nepravilno kretanje, na potezu je {trenutniIgrac}!")
             continue
         if BrojZidova > 0:
+            grafCopy = graf.copy()
             validanZid = unesiZidove(graf, [(zid1, zid2)], M, N)
             if not validanZid:
                 print("Nepravilno unesen zid")
                 continue
+            if not isClosedPath((pobedaA1, pobedaA2,pobedaB1, pobedaB2), graf):
+                graf= grafCopy
+                print("Unosenje ovog zida dovodi do zatvaranja cilja, unesite pravilan zid")
+                continue
+
         trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
         BrojZidova -= 1
         #pobeda = pobedaPravilnoTuple[0]
