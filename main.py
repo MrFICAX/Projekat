@@ -106,11 +106,21 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         pomocnoBrisanje(1, 0, 1, 0, listaZidova, graf)
         pomocnoBrisanje(0, 0, 1, 0, listaZidova, graf)
         pomocnoBrisanje(1, 0, 0, 0, listaZidova, graf)
+        pomocnoBrisanje(0, 0, -1, 0, listaZidova, graf)
+        pomocnoBrisanje(-1, 0, 0, 0, listaZidova, graf)
+        pomocnoBrisanje(1, 0, 2, 0, listaZidova, graf)
+        pomocnoBrisanje(2, 0, 1, 0, listaZidova, graf)
+
 
     else:
         pomocnoBrisanje(0, 1, 0, 1, listaZidova, graf)
         pomocnoBrisanje(0, 0, 0, 1, listaZidova, graf)
         pomocnoBrisanje(1, 0, -1, 1, listaZidova, graf)
+        pomocnoBrisanje(0, 0, 0, -1, listaZidova, graf)
+        pomocnoBrisanje(0, -1, 0, 0, listaZidova, graf)
+        pomocnoBrisanje(0, 1, 0, 2, listaZidova, graf)
+        pomocnoBrisanje(0, 2, 0, 1, listaZidova, graf)
+
 
     return True
 
@@ -238,41 +248,46 @@ def isClosedPath(pobedaPozicije, graph):
     igracCounterX=0
     igracCounterY=0
 
-    ciljniCvorovi = Queue(4)
+    ciljniCvorovi = list()
     start = pobedaPozicije[0]
     destinationQueue = Queue(len(graph))
     visited = set()
-    visited.add(start)
-    destinationQueue.put(start)
+
     for i in range(0,2):
         if pobedaPozicije[i] not in ciljniCvorovi:
-            ciljniCvorovi.put(pobedaPozicije[i])
+            visited.add(pobedaPozicije[i])
+            destinationQueue.put(pobedaPozicije[i])
+            ciljniCvorovi.append(pobedaPozicije[i])
             while (not destinationQueue.empty()):
-             node = destinationQueue.get()
-             if(graph[node][0]=='x'):
-                igracCounterX+=1
-                if(node == pobedaPozicije[1]):
-                   ciljniCvorovi.put(node)
-                for child in graph[node]:
+                node = destinationQueue.get()
+                if(graph[node][0]=='x'):
+                    igracCounterX+=1
+                if(node == pobedaPozicije[i+1]):
+                   ciljniCvorovi.append(node)
+                for child in graph[node][1]:
                   if child not in visited:
                     destinationQueue.put(child)
                     visited.add(child)
         if(igracCounterX<2):
             return False
 
+    visited = set()
+
     for i in range(2,4):
         if pobedaPozicije[i] not in ciljniCvorovi:
-            ciljniCvorovi.put(pobedaPozicije[i])
+            visited.add(pobedaPozicije[i])
+            destinationQueue.put(pobedaPozicije[i])
+            ciljniCvorovi.append(pobedaPozicije[i])
             while (not destinationQueue.empty()):
-             node = destinationQueue.get()
-             if(graph[node][0]=='y'):
-                igracCounterY+=1
-                if(node == pobedaPozicije[1]):
-                   ciljniCvorovi.put(node)
-                for child in graph[node]:
+                node = destinationQueue.get()
+                if(graph[node][0]=='y'):
+                    igracCounterY+=1
+                if(node == pobedaPozicije[i+1]):
+                   ciljniCvorovi.append(node)
+                for child in graph[node][1]:
                   if child not in visited:
                         destinationQueue.put(child)
-                       visited.add(child)
+                        visited.add(child)
         if(igracCounterY<2):
             return False
     return True
@@ -309,7 +324,7 @@ def gameLoop():  # filip
     # M = 12
     # N = 14
     graf = SetujPocetnoStanje(
-        M, N, ["1,1", "4,5", "3,3", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
+        M, N, ["1,1", "4,5", "3,5", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
     while True:
         print(f"NA POTEZU JE IGRAC {trenutniIgrac}: ")
@@ -340,15 +355,18 @@ def gameLoop():  # filip
             print("Unesite pravilno polje za krajnju poziciju!")
             continue
 
+        grafCopy = graf.copy()
+
         pobedaPravilnoTuple = pomeriIGraca(
             graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda, pobedaA1, pobedaB1, pobedaA2, pobedaB2)
         if(not pobedaPravilnoTuple[1]):
+            graf = grafCopy
             print(f"Nepravilno kretanje, na potezu je {trenutniIgrac}!")
             continue
         if BrojZidova > 0:
-            grafCopy = graf.copy()
             validanZid = unesiZidove(graf, [(zid1, zid2)], M, N)
             if not validanZid:
+                graf=grafCopy
                 print("Nepravilno unesen zid")
                 continue
             if not isClosedPath((pobedaA1, pobedaA2,pobedaB1, pobedaB2), graf):
