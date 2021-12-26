@@ -88,7 +88,7 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         if(str((str(int(listaZidova[0][0].split(',')[0])))+','+str((int(listaZidova[0][1].split(',')[1])+1))) not in graf[listaZidova[0][0]][1]):
             if(str(listaZidova[0][1].split(',')[0]+','+str(int(listaZidova[0][1].split(',')[1])+1)) not in graf[listaZidova[0][1]][1]):
                 return False
-                
+
     if(re.search(f"{m},.", listaZidova[0][0]) and v_h):
         return False
     if(re.search(f".,{n}", listaZidova[0][0]) and not v_h):
@@ -111,7 +111,6 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         pomocnoBrisanje(1, 0, 2, 0, listaZidova, graf)
         pomocnoBrisanje(2, 0, 1, 0, listaZidova, graf)
 
-
     else:
         pomocnoBrisanje(0, 1, 0, 1, listaZidova, graf)
         pomocnoBrisanje(0, 0, 0, 1, listaZidova, graf)
@@ -120,7 +119,6 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         pomocnoBrisanje(0, -1, 0, 0, listaZidova, graf)
         pomocnoBrisanje(0, 1, 0, 2, listaZidova, graf)
         pomocnoBrisanje(0, 2, 0, 1, listaZidova, graf)
-
 
     return True
 
@@ -162,8 +160,9 @@ def pomeriIGraca(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px1, px2, py1, 
 
     endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
     startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
-    if(endPozInt[0] >= 1 and endPozInt[0] <= m and endPozInt[1] >= 0 and endPozInt[1] <= n):
-        ValidiranPokret = validacijaPokreta(graf, startPozInt, endPozInt, endPoz, startPoz)
+    if(endPozInt[0] >= 1 and endPozInt[0] <= m and endPozInt[1] >= 1 and endPozInt[1] <= n):
+        ValidiranPokret = validacijaPokreta(
+            graf, startPozInt, endPozInt, endPoz, startPoz)
         if ValidiranPokret:
             if (endPoz == px1 or endPoz == px2) and naPotezu == "x":
                 pobeda = True
@@ -244,54 +243,54 @@ def stampajGraf(graf, M, N):  # filip
         print(horizontalniZidovi)
     print("-----------------------------------------")
 
+
 def isClosedPath(pobedaPozicije, graph):
-    igracCounterX=0
-    igracCounterY=0
+    igracCounterX = 0
+    igracCounterY = 0
 
     ciljniCvorovi = list()
     start = pobedaPozicije[0]
     destinationQueue = Queue(len(graph))
     visited = set()
 
-    for i in range(0,2):
+    for i in range(0, 2):
         if pobedaPozicije[i] not in ciljniCvorovi:
             visited.add(pobedaPozicije[i])
             destinationQueue.put(pobedaPozicije[i])
             ciljniCvorovi.append(pobedaPozicije[i])
             while (not destinationQueue.empty()):
                 node = destinationQueue.get()
-                if(graph[node][0]=='x'):
-                    igracCounterX+=1
+                if(graph[node][0] == 'x'):
+                    igracCounterX += 1
                 if(node == pobedaPozicije[i+1]):
-                   ciljniCvorovi.append(node)
+                    ciljniCvorovi.append(node)
                 for child in graph[node][1]:
-                  if child not in visited:
-                    destinationQueue.put(child)
-                    visited.add(child)
-        if(igracCounterX<2):
+                    if child not in visited:
+                        destinationQueue.put(child)
+                        visited.add(child)
+        if(igracCounterX < 2):
             return False
 
     visited = set()
 
-    for i in range(2,4):
+    for i in range(2, 4):
         if pobedaPozicije[i] not in ciljniCvorovi:
             visited.add(pobedaPozicije[i])
             destinationQueue.put(pobedaPozicije[i])
             ciljniCvorovi.append(pobedaPozicije[i])
             while (not destinationQueue.empty()):
                 node = destinationQueue.get()
-                if(graph[node][0]=='y'):
-                    igracCounterY+=1
+                if(graph[node][0] == 'y'):
+                    igracCounterY += 1
                 if(node == pobedaPozicije[i+1]):
-                   ciljniCvorovi.append(node)
+                    ciljniCvorovi.append(node)
                 for child in graph[node][1]:
-                  if child not in visited:
+                    if child not in visited:
                         destinationQueue.put(child)
                         visited.add(child)
-        if(igracCounterY<2):
+        if(igracCounterY < 2):
             return False
     return True
-
 
 
 def gameLoop():  # filip
@@ -324,8 +323,10 @@ def gameLoop():  # filip
     # M = 12
     # N = 14
     graf = SetujPocetnoStanje(
-        M, N, ["1,1", "4,5", "3,5", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
+        M, N, ["1,1", "4,5", "10,14", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
+
+
     while True:
         print(f"NA POTEZU JE IGRAC {trenutniIgrac}: ")
         print("Selektujte polje sa igracem koga pomerate: ")
@@ -355,6 +356,10 @@ def gameLoop():  # filip
             print("Unesite pravilno polje za krajnju poziciju!")
             continue
 
+#Testiranje metode generisiSvaMogucaStanja
+        #lista = generisiSvaMogucaStanja(graf, M, N, "10,14", "y",
+        #                           pobeda, pobedaA1, pobedaB1, pobedaA2, pobedaB2)
+
         grafCopy = graf.copy()
 
         pobedaPravilnoTuple = pomeriIGraca(
@@ -366,12 +371,13 @@ def gameLoop():  # filip
         if BrojZidova > 0:
             validanZid = unesiZidove(graf, [(zid1, zid2)], M, N)
             if not validanZid:
-                graf=grafCopy
+                graf = grafCopy
                 print("Nepravilno unesen zid")
                 continue
-            if not isClosedPath((pobedaA1, pobedaA2,pobedaB1, pobedaB2), graf):
-                graf= grafCopy
-                print("Unosenje ovog zida dovodi do zatvaranja cilja, unesite pravilan zid")
+            if not isClosedPath((pobedaA1, pobedaA2, pobedaB1, pobedaB2), graf):
+                graf = grafCopy
+                print(
+                    "Unosenje ovog zida dovodi do zatvaranja cilja, unesite pravilan zid")
                 continue
 
         trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
@@ -392,6 +398,54 @@ def gameLoop():  # filip
 
 def proveriPobednika(pobedaPravilnoTuple):  # filip
     return pobedaPravilnoTuple[0]
+
+
+def generisiNovoStanjeZaUlazniPotez(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px1, px2, py1, py2):
+    igrac = graf[startPoz][0]
+    if(igrac != naPotezu):
+        return (False, False, False)
+    noviGraf = graf.copy()
+    endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
+    startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
+    if(endPozInt[0] >= 1 and endPozInt[0] <= m and endPozInt[1] >= 1 and endPozInt[1] <= n):
+        ValidiranPokret = validacijaPokreta(
+            noviGraf, startPozInt, endPozInt, endPoz, startPoz)
+        if ValidiranPokret:
+            if (endPoz == px1 or endPoz == px2) and naPotezu == "x":
+                pobeda = True
+            elif (endPoz == py1 or endPoz == py2) and naPotezu == 'y':
+                pobeda = True
+            noviGraf[startPoz] = (0, noviGraf[startPoz][1])
+            noviGraf[endPoz] = (igrac, noviGraf[endPoz][1])
+    else:
+        ValidiranPokret = False
+    ret = (pobeda, noviGraf, ValidiranPokret)
+    return ret
+
+
+def generisiSvaMogucaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py1, py2):
+
+    if graf[startPoz][0] != naPotezu:
+        print("Na prosledjenoj startnoj poziciji se ne nalazi igrac koji treba da bude na potezu")
+        return []
+    listaStanja = []
+    startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
+    for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
+        g = (startPozInt[0] + dx, startPozInt[1] + dy)
+        stringG = f"{g[0]},{g[1]}"
+        tmpStanje = generisiNovoStanjeZaUlazniPotez(
+            graf, m, n, startPoz, stringG, naPotezu, pobeda, px1, px2, py1, py2)
+        if tmpStanje[2]:
+            listaStanja.append(tmpStanje[1])
+
+    for tx, ty in zip([1, -1, 1, -1], [1, -1, -1, 1]):
+        p = (startPozInt[0] + tx, startPozInt[1] + ty)
+        stringP = f"{p[0]},{p[1]}"
+        tmpStanje = generisiNovoStanjeZaUlazniPotez(
+            graf, m, n, startPoz, stringP, naPotezu, pobeda, px1, px2, py1, py2)
+        if tmpStanje[2]:
+            listaStanja.append(tmpStanje[1])
+    return listaStanja
 
 
 gameLoop()
