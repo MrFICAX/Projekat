@@ -2,6 +2,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import re
 from queue import Queue
+import random
+import math
+
+
 
 
 # graf = {
@@ -326,6 +330,8 @@ def gameLoop():  # filip
         M, N, ["1,1", "4,5", "10,14", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
 
+    pommmmm=minimax(graf, 5, -math.inf, math.inf, True, 'x', M, N, False, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
+    print(pommmmm)
 
     while True:
         print(f"NA POTEZU JE IGRAC {trenutniIgrac}: ")
@@ -446,6 +452,97 @@ def generisiSvaMogucaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py
         if tmpStanje[2]:
             listaStanja.append(tmpStanje[1])
     return listaStanja
+
+
+
+
+
+
+
+
+
+#covek
+#x1, x2
+
+
+#mahina POINTOFVIEW
+#y1, y2
+
+
+#move, evaluation = minimax(graph, 8, -math.inf, math.inf, True, )
+
+
+def pozicijePijuna(graph):
+    sp=[]
+    countx=0
+    county=0
+    for i in graph:
+        if graph[i][0]=='x': 
+            sp=[i]+sp
+        if graph[i][0]=='y':
+            sp=sp+[i]
+
+    return sp
+
+
+
+
+def minimax(graph, depth, alpha, beta, maximizing_player, naPotezu, m, n, pobeda, px1, px2, py1, py2):
+
+    if depth == 0:
+        return None,  random.randint(-100, 100)
+
+
+    children = list()
+
+    startPoz=pozicijePijuna(graph)
+
+    if maximizing_player:
+        children.append(generisiSvaMogucaStanja(graph, m, n, startPoz[0], naPotezu, pobeda, px1, px2, py1, py2))
+        children.append(generisiSvaMogucaStanja(graph, m, n, startPoz[1], naPotezu, pobeda, px1, px2, py1, py2))
+    else:
+        children.append(generisiSvaMogucaStanja(graph, m, n, startPoz[2], naPotezu, pobeda, px1, px2, py1, py2))
+        children.append(generisiSvaMogucaStanja(graph, m, n, startPoz[3], naPotezu, pobeda, px1, px2, py1, py2))
+    
+    children=children[0]+children[1]
+    best_move = children[0]
+
+   
+    
+    if maximizing_player: #pov->robot      najbolji potez za robota
+        max_eval = -math.inf        
+        for child in children:
+            graph_copy = graph.copy()
+            naPotezuu='x' if naPotezu=='y' else 'y'
+            current_eval = minimax(child, depth - 1, alpha, beta, False, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
+            if current_eval > max_eval:
+                max_eval = current_eval
+                best_move = child
+            alpha = max(alpha, current_eval)
+            if beta <= alpha:
+                break
+        return best_move, max_eval
+    
+    else:
+        min_eval = math.inf
+        for child in children:
+            graph_copy = graph.copy()
+            naPotezuu='x' if naPotezu=='y' else 'y'
+            current_eval = minimax(graph_copy, depth - 1, alpha, beta, True, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
+            if current_eval < min_eval:
+                min_eval = current_eval
+                best_move = child
+            beta = min(beta, current_eval)
+            if beta <= alpha:
+                break
+    
+        return best_move, min_eval
+
+
+
+
+
+
 
 
 gameLoop()
