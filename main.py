@@ -6,8 +6,6 @@ import random
 import math
 
 
-
-
 # graf = {
 #     "1.1": (0, ["1.2", "2.2"...])
 #     "1.2": ('A')
@@ -82,6 +80,10 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaA1, pobedaA2, pobedaB1, pobeda
 
 def unesiZidove(graf, listaZidova, m, n):  # zeljko
 
+    if '9' in listaZidova[0][0] or '9' in listaZidova[0][1]:
+        a=10
+    if '10' in listaZidova[0][0] or '10' in listaZidova[0][1]:
+        a = 10
     v_h = listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]
 
     if v_h:
@@ -89,9 +91,13 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
             if(str(str(int(listaZidova[0][1].split(',')[0])+1)+','+listaZidova[0][1].split(',')[1]) not in graf[listaZidova[0][1]][1]):
                 return False
     else:
-        if(str((str(int(listaZidova[0][0].split(',')[0])))+','+str((int(listaZidova[0][1].split(',')[1])+1))) not in graf[listaZidova[0][0]][1]):
-            if(str(listaZidova[0][1].split(',')[0]+','+str(int(listaZidova[0][1].split(',')[1])+1)) not in graf[listaZidova[0][1]][1]):
-                return False
+       if listaZidova[0][1] not in graf[listaZidova[0][0]][1]:
+           if listaZidova[0][0] not in graf[listaZidova[0][1]][1]:
+               return False
+
+        # if(str((str((int(listaZidova[0][0].split(',')[0])+1)))+',' + str(int(listaZidova[0][0].split(',')[1]))) not in graf[listaZidova[0][0]][1]):
+        #     if(str(listaZidova[0][1].split(',')[0]+','+str(int(listaZidova[0][1].split(',')[1])+1)) not in graf[listaZidova[0][1]][1]):
+        #         return False
 
     if(re.search(f"{m},.", listaZidova[0][0]) and v_h):
         return False
@@ -134,15 +140,17 @@ def pomocnoBrisanje(a, b, c, d, listaZidova, graf, m, n):  # zeljko
     x1[1] = int(x1[1]) + b
     y1[0] = int(y1[0]) + c
     y1[1] = int(y1[1]) + d
-    novaLista = [(str(x1[0]) + ',' + str(x1[1]),
-                  str(y1[0]) + ',' + str(y1[1]))]
-    obrisi(novaLista, graf, m, n)
+    novaLista = (str(x1[0]) + ',' + str(x1[1]),
+                  str(y1[0]) + ',' + str(y1[1]))
+    if 0 == int(novaLista[0].split(",")[0]) or 0 == int(novaLista[0].split(",")[1]) or 0 == int(novaLista[1].split(",")[0]) or 0 == int(novaLista[1].split(",")[1]):
+        return
+    if n+1 == int(novaLista[0].split(",")[0]) or m+1 == int(novaLista[0].split(",")[1]) or n+1 == int(novaLista[1].split(",")[0]) or m+1 == int(novaLista[1].split(",")[1]):
+        return
+    obrisi([novaLista], graf, m, n)
 
 
 def obrisi(listaZidova, graf, m, n):  # zeljko
     for edge in listaZidova:
-        if '0' in  edge[0] or '0' in edge[1] or str(m+1) in edge[0] or str(m+1) in edge[1] or str(n+1) in edge[0] or str(+1) in edge[1]:
-            continue
         potege = list()
         for potega in graf[edge[0]][1]:
             if(potega != edge[1]):
@@ -189,6 +197,8 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):  # filip
 
     for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
         g = (trenutno[0] + dx, trenutno[1] + dy)
+        if g == (10,8):
+            a=3
         if (g == ciljno):
             for node in graf[startPoz][1]:
                 if(node.split(",")[0] != startPoz.split(",")[0] and node.split(",")[1] != startPoz.split(",")[1]):
@@ -197,7 +207,7 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):  # filip
                     if(child.split(",")[0] != node.split(",")[0] and child.split(",")[1] != node.split(",")[1]):
                         continue
                     else:
-                        if child[0] == node[0] or child[2] == node[2]:
+                        if child.split(",")[0] == node.split(",")[0] or child.split(",")[1] == node.split(",")[1]:
                             if(child == endpoz):
                                 return True
 
@@ -299,6 +309,164 @@ def isClosedPath(pobedaPozicije, graph):
     return True
 
 
+def proveriPobednika(pobedaPravilnoTuple):  # filip
+    return pobedaPravilnoTuple[0]
+
+
+def generisiNovoStanjeZaUlazniPotez(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px1, px2, py1, py2):
+    if endPoz == "3,6":
+        a=10
+    if naPotezu == 'y':
+        a=10
+    igrac = graf[startPoz][0]
+    if(igrac != naPotezu):
+        return (False, False, False)
+    noviGraf = graf.copy()
+    endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
+    startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
+    if(endPozInt[0] >= 1 and endPozInt[0] <= m and endPozInt[1] >= 1 and endPozInt[1] <= n):
+        ValidiranPokret = validacijaPokreta(
+            noviGraf, startPozInt, endPozInt, endPoz, startPoz)
+        if ValidiranPokret:
+            if (endPoz == px1 or endPoz == px2) and naPotezu == "x":
+                pobeda = True
+            elif (endPoz == py1 or endPoz == py2) and naPotezu == 'y':
+                pobeda = True
+            noviGraf[startPoz] = (0, noviGraf[startPoz][1])
+            noviGraf[endPoz] = (igrac, noviGraf[endPoz][1])
+    else:
+        ValidiranPokret = False
+        return pobeda, [], ValidiranPokret
+
+    listaGrafova = []
+
+    #horizontalni zidovi
+    for i in range(1, m):
+        for j in range(1, n):
+            novinoviGraf = noviGraf.copy()
+            if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i+1)+','+str(j))], m, n):
+                stampajGraf(novinoviGraf, m, n)
+                if isClosedPath([px1, px2, py1, py2], novinoviGraf):
+                    listaGrafova.append(novinoviGraf)
+                else:
+                    a = 10
+    #vertikalni zidovi
+    for i in range(1, m):
+        for j in range(1, n):
+            novinoviGraf = noviGraf.copy()
+            if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i)+','+str(j+1))], m, n):
+                stampajGraf(novinoviGraf, m, n)
+                if isClosedPath([px1, px2, py1, py2], novinoviGraf):
+                    listaGrafova.append(novinoviGraf)
+                else:
+                    a = 10
+
+    ret = (pobeda, listaGrafova, ValidiranPokret)
+
+    return ret
+
+
+def generisiSvaMogucaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py1, py2):
+
+    if graf[startPoz][0] != naPotezu:
+        print("Na prosledjenoj startnoj poziciji se ne nalazi igrac koji treba da bude na potezu")
+        return []
+    listaStanja = []
+    startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
+    for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
+        g = (startPozInt[0] + dx, startPozInt[1] + dy)
+        stringG = f"{g[0]},{g[1]}"
+        tmpStanje = generisiNovoStanjeZaUlazniPotez(
+            graf, m, n, startPoz, stringG, naPotezu, pobeda, px1, px2, py1, py2)
+        if tmpStanje[2]:
+            listaStanja = listaStanja+tmpStanje[1]
+
+    for tx, ty in zip([1, -1, 1, -1], [1, -1, -1, 1]):
+        p = (startPozInt[0] + tx, startPozInt[1] + ty)
+        stringP = f"{p[0]},{p[1]}"
+        tmpStanje = generisiNovoStanjeZaUlazniPotez(
+            graf, m, n, startPoz, stringP, naPotezu, pobeda, px1, px2, py1, py2)
+        if tmpStanje[2]:
+            listaStanja = listaStanja+tmpStanje[1]
+    return listaStanja
+
+# covek
+#x1, x2
+
+# mahina POINTOFVIEW
+#y1, y2
+
+#move, evaluation = minimax(graph, 8, -math.inf, math.inf, True, )
+
+
+def pozicijePijuna(graph):
+    sp = []
+    countx = 0
+    county = 0
+    for i in graph:
+        if graph[i][0] == 'x':
+            sp = [i]+sp
+        if graph[i][0] == 'y':
+            sp = sp+[i]
+
+    return sp
+
+
+def minimax(graph, depth, alpha, beta, maximizing_player, naPotezu, m, n, pobeda, px1, px2, py1, py2):
+
+    if depth == 0:
+        return None,  random.randint(-100, 100)
+
+    children = list()
+
+    startPoz = pozicijePijuna(graph)
+
+    if maximizing_player:
+        children.append(generisiSvaMogucaStanja(
+            graph, m, n, startPoz[0], naPotezu, pobeda, px1, px2, py1, py2))
+        children.append(generisiSvaMogucaStanja(
+            graph, m, n, startPoz[1], naPotezu, pobeda, px1, px2, py1, py2))
+    else:
+        children.append(generisiSvaMogucaStanja(
+            graph, m, n, startPoz[2], naPotezu, pobeda, px1, px2, py1, py2))
+        children.append(generisiSvaMogucaStanja(
+            graph, m, n, startPoz[3], naPotezu, pobeda, px1, px2, py1, py2))
+
+    children = children[0]+children[1]
+    best_move = children[0]
+
+    if maximizing_player:  # pov->robot      najbolji potez za robota
+        max_eval = -math.inf
+        for child in children:
+
+            naPotezuu = 'x' if naPotezu == 'y' else 'y'
+            current_eval = minimax(child, depth - 1, alpha, beta,
+                                   False, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
+            if current_eval > max_eval:
+                max_eval = current_eval
+                best_move = child
+            alpha = max(alpha, current_eval)
+            if beta <= alpha:
+                break
+        return best_move, max_eval
+
+    else:
+        min_eval = math.inf
+        for child in children:
+
+            naPotezuu = 'x' if naPotezu == 'y' else 'y'
+            current_eval = minimax(child, depth - 1, alpha, beta,
+                                   True, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
+            if current_eval < min_eval:
+                min_eval = current_eval
+                best_move = child
+            beta = min(beta, current_eval)
+            if beta <= alpha:
+                break
+
+        return best_move, min_eval
+
+
 def gameLoop():  # filip
 
     print("Unesite M velicinu table (broj vrsta): ")
@@ -332,7 +500,8 @@ def gameLoop():  # filip
         M, N, ["1,1", "4,5", "8,8", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
 
-    pommmmm=minimax(graf, 2, -math.inf, math.inf, True, 'x', M, N, False, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
+    pommmmm = minimax(graf, 2, -math.inf, math.inf, True, 'x',
+                      M, N, False, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
     print(pommmmm)
 
     while True:
@@ -364,8 +533,8 @@ def gameLoop():  # filip
             print("Unesite pravilno polje za krajnju poziciju!")
             continue
 
-#Testiranje metode generisiSvaMogucaStanja
-        #lista = generisiSvaMogucaStanja(graf, M, N, "10,14", "y",
+        # Testiranje metode generisiSvaMogucaStanja
+        # lista = generisiSvaMogucaStanja(graf, M, N, "10,14", "y",
         #                           pobeda, pobedaA1, pobedaB1, pobedaA2, pobedaB2)
 
         grafCopy = graf.copy()
@@ -402,170 +571,6 @@ def gameLoop():  # filip
         stampajGraf(graf, M, N)
 
     print("Pobednik je : " + "x" if trenutniIgrac == "y" else "y")
-
-
-def proveriPobednika(pobedaPravilnoTuple):  # filip
-    return pobedaPravilnoTuple[0]
-
-
-def generisiNovoStanjeZaUlazniPotez(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px1, px2, py1, py2):
-    igrac = graf[startPoz][0]
-    if(igrac != naPotezu):
-        return (False, False, False)
-    noviGraf = graf.copy()
-    endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
-    startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
-    if(endPozInt[0] >= 1 and endPozInt[0] <= m and endPozInt[1] >= 1 and endPozInt[1] <= n):
-        ValidiranPokret = validacijaPokreta(
-            noviGraf, startPozInt, endPozInt, endPoz, startPoz)
-        if ValidiranPokret:
-            if (endPoz == px1 or endPoz == px2) and naPotezu == "x":
-                pobeda = True
-            elif (endPoz == py1 or endPoz == py2) and naPotezu == 'y':
-                pobeda = True
-            noviGraf[startPoz] = (0, noviGraf[startPoz][1])
-            noviGraf[endPoz] = (igrac, noviGraf[endPoz][1])
-    else:
-        ValidiranPokret = False
-        return pobeda,[],ValidiranPokret
-
-    listaGrafova=[]
-
-    for i in range(1, m):
-        for j in range(1, n, 2):
-            novinoviGraf=noviGraf.copy()
-            if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i+1)+','+str(j))], m, n):
-                listaGrafova.append(novinoviGraf)
-
-
-    for i in range(1, m, 2):
-        for j in range(1, n):
-            novinoviGraf=noviGraf.copy()
-            if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i)+','+str(j+1))], m, n):
-                listaGrafova.append(novinoviGraf)
-
-    ret = (pobeda, listaGrafova, ValidiranPokret)
-   
-
-
-
-    return ret
-
-
-def generisiSvaMogucaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py1, py2):
-
-    if graf[startPoz][0] != naPotezu:
-        print("Na prosledjenoj startnoj poziciji se ne nalazi igrac koji treba da bude na potezu")
-        return []
-    listaStanja = []
-    startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
-    for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
-        g = (startPozInt[0] + dx, startPozInt[1] + dy)
-        stringG = f"{g[0]},{g[1]}"
-        tmpStanje = generisiNovoStanjeZaUlazniPotez(
-            graf, m, n, startPoz, stringG, naPotezu, pobeda, px1, px2, py1, py2)
-        if tmpStanje[2]:
-            listaStanja=listaStanja+tmpStanje[1]
-
-    for tx, ty in zip([1, -1, 1, -1], [1, -1, -1, 1]):
-        p = (startPozInt[0] + tx, startPozInt[1] + ty)
-        stringP = f"{p[0]},{p[1]}"
-        tmpStanje = generisiNovoStanjeZaUlazniPotez(
-            graf, m, n, startPoz, stringP, naPotezu, pobeda, px1, px2, py1, py2)
-        if tmpStanje[2]:
-            listaStanja=listaStanja+tmpStanje[1]
-    return listaStanja
-
-
-
-
-
-
-
-
-
-#covek
-#x1, x2
-
-
-#mahina POINTOFVIEW
-#y1, y2
-
-
-#move, evaluation = minimax(graph, 8, -math.inf, math.inf, True, )
-
-
-def pozicijePijuna(graph):
-    sp=[]
-    countx=0
-    county=0
-    for i in graph:
-        if graph[i][0]=='x': 
-            sp=[i]+sp
-        if graph[i][0]=='y':
-            sp=sp+[i]
-
-    return sp
-
-
-
-
-def minimax(graph, depth, alpha, beta, maximizing_player, naPotezu, m, n, pobeda, px1, px2, py1, py2):
-
-    if depth == 0:
-        return None,  random.randint(-100, 100)
-
-
-    children = list()
-
-    startPoz=pozicijePijuna(graph)
-
-    if maximizing_player:
-        children.append(generisiSvaMogucaStanja(graph, m, n, startPoz[0], naPotezu, pobeda, px1, px2, py1, py2))
-        children.append(generisiSvaMogucaStanja(graph, m, n, startPoz[1], naPotezu, pobeda, px1, px2, py1, py2))
-    else:
-        children.append(generisiSvaMogucaStanja(graph, m, n, startPoz[2], naPotezu, pobeda, px1, px2, py1, py2))
-        children.append(generisiSvaMogucaStanja(graph, m, n, startPoz[3], naPotezu, pobeda, px1, px2, py1, py2))
-    
-    children=children[0]+children[1]
-    best_move = children[0]
-
-   
-    
-    if maximizing_player: #pov->robot      najbolji potez za robota
-        max_eval = -math.inf        
-        for child in children:
-            
-            naPotezuu='x' if naPotezu=='y' else 'y'
-            current_eval = minimax(child, depth - 1, alpha, beta, False, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
-            if current_eval > max_eval:
-                max_eval = current_eval
-                best_move = child
-            alpha = max(alpha, current_eval)
-            if beta <= alpha:
-                break
-        return best_move, max_eval
-    
-    else:
-        min_eval = math.inf
-        for child in children:
-            
-            naPotezuu='x' if naPotezu=='y' else 'y'
-            current_eval = minimax(child, depth - 1, alpha, beta, True, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
-            if current_eval < min_eval:
-                min_eval = current_eval
-                best_move = child
-            beta = min(beta, current_eval)
-            if beta <= alpha:
-                break
-    
-        return best_move, min_eval
-
-
-
-
-
-
 
 
 gameLoop()
