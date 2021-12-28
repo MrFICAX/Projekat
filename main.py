@@ -102,32 +102,32 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
     if(re.search(f".,{n}", listaZidova[0][1]) and not v_h):
         return False
 
-    obrisi(listaZidova, graf)
+    obrisi(listaZidova, graf, m, n)
     print(listaZidova[0][0].split(',')[0])
     print(listaZidova[0][1].split(',')[1])
 
     if(listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]):
-        pomocnoBrisanje(1, 0, 1, 0, listaZidova, graf)
-        pomocnoBrisanje(0, 0, 1, 0, listaZidova, graf)
-        pomocnoBrisanje(1, 0, 0, 0, listaZidova, graf)
-        pomocnoBrisanje(0, 0, -1, 0, listaZidova, graf)
-        pomocnoBrisanje(-1, 0, 0, 0, listaZidova, graf)
-        pomocnoBrisanje(1, 0, 2, 0, listaZidova, graf)
-        pomocnoBrisanje(2, 0, 1, 0, listaZidova, graf)
+        pomocnoBrisanje(1, 0, 1, 0, listaZidova, graf, m, n)
+        pomocnoBrisanje(0, 0, 1, 0, listaZidova, graf, m, n)
+        pomocnoBrisanje(1, 0, 0, 0, listaZidova, graf, m, n)
+        pomocnoBrisanje(0, 0, -1, 0, listaZidova, graf, m, n)
+        pomocnoBrisanje(-1, 0, 0, 0, listaZidova, graf, m, n)
+        pomocnoBrisanje(1, 0, 2, 0, listaZidova, graf, m, n)
+        pomocnoBrisanje(2, 0, 1, 0, listaZidova, graf, m, n)
 
     else:
-        pomocnoBrisanje(0, 1, 0, 1, listaZidova, graf)
-        pomocnoBrisanje(0, 0, 0, 1, listaZidova, graf)
-        pomocnoBrisanje(1, 0, -1, 1, listaZidova, graf)
-        pomocnoBrisanje(0, 0, 0, -1, listaZidova, graf)
-        pomocnoBrisanje(0, -1, 0, 0, listaZidova, graf)
-        pomocnoBrisanje(0, 1, 0, 2, listaZidova, graf)
-        pomocnoBrisanje(0, 2, 0, 1, listaZidova, graf)
+        pomocnoBrisanje(0, 1, 0, 1, listaZidova, graf, m, n)
+        pomocnoBrisanje(0, 0, 0, 1, listaZidova, graf, m, n)
+        pomocnoBrisanje(1, 0, -1, 1, listaZidova, graf, m, n)
+        pomocnoBrisanje(0, 0, 0, -1, listaZidova, graf, m, n)
+        pomocnoBrisanje(0, -1, 0, 0, listaZidova, graf, m, n)
+        pomocnoBrisanje(0, 1, 0, 2, listaZidova, graf, m, n)
+        pomocnoBrisanje(0, 2, 0, 1, listaZidova, graf, m, n)
 
     return True
 
 
-def pomocnoBrisanje(a, b, c, d, listaZidova, graf):  # zeljko
+def pomocnoBrisanje(a, b, c, d, listaZidova, graf, m, n):  # zeljko
     x1 = list(listaZidova[0][0].split(','))
     y1 = list(listaZidova[0][1].split(','))
     x1[0] = int(x1[0]) + a
@@ -136,11 +136,13 @@ def pomocnoBrisanje(a, b, c, d, listaZidova, graf):  # zeljko
     y1[1] = int(y1[1]) + d
     novaLista = [(str(x1[0]) + ',' + str(x1[1]),
                   str(y1[0]) + ',' + str(y1[1]))]
-    obrisi(novaLista, graf)
+    obrisi(novaLista, graf, m, n)
 
 
-def obrisi(listaZidova, graf):  # zeljko
+def obrisi(listaZidova, graf, m, n):  # zeljko
     for edge in listaZidova:
+        if '0' in  edge[0] or '0' in edge[1] or str(m+1) in edge[0] or str(m+1) in edge[1] or str(n+1) in edge[0] or str(+1) in edge[1]:
+            continue
         potege = list()
         for potega in graf[edge[0]][1]:
             if(potega != edge[1]):
@@ -195,7 +197,7 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):  # filip
                     if(child.split(",")[0] != node.split(",")[0] and child.split(",")[1] != node.split(",")[1]):
                         continue
                     else:
-                        if child[0] == node[0] or child[1] == node[1]:
+                        if child[0] == node[0] or child[2] == node[2]:
                             if(child == endpoz):
                                 return True
 
@@ -205,7 +207,7 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):  # filip
             for node in graf[startPoz][1]:
                 if(node == endpoz):
                     return True
-    print("Nije moguce pomeriti igraca na ovo polje! Postoji zid ili ste uneli nevalidnu vrednost")
+    #print("Nije moguce pomeriti igraca na ovo polje! Postoji zid ili ste uneli nevalidnu vrednost")
     return False
 
 
@@ -327,10 +329,10 @@ def gameLoop():  # filip
     # M = 12
     # N = 14
     graf = SetujPocetnoStanje(
-        M, N, ["1,1", "4,5", "10,14", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
+        M, N, ["1,1", "4,5", "8,8", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
 
-    pommmmm=minimax(graf, 5, -math.inf, math.inf, True, 'x', M, N, False, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
+    pommmmm=minimax(graf, 2, -math.inf, math.inf, True, 'x', M, N, False, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
     print(pommmmm)
 
     while True:
@@ -425,7 +427,28 @@ def generisiNovoStanjeZaUlazniPotez(graf, m, n, startPoz, endPoz, naPotezu, pobe
             noviGraf[endPoz] = (igrac, noviGraf[endPoz][1])
     else:
         ValidiranPokret = False
-    ret = (pobeda, noviGraf, ValidiranPokret)
+        return pobeda,[],ValidiranPokret
+
+    listaGrafova=[]
+
+    for i in range(1, m):
+        for j in range(1, n, 2):
+            novinoviGraf=noviGraf.copy()
+            if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i+1)+','+str(j))], m, n):
+                listaGrafova.append(novinoviGraf)
+
+
+    for i in range(1, m, 2):
+        for j in range(1, n):
+            novinoviGraf=noviGraf.copy()
+            if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i)+','+str(j+1))], m, n):
+                listaGrafova.append(novinoviGraf)
+
+    ret = (pobeda, listaGrafova, ValidiranPokret)
+   
+
+
+
     return ret
 
 
@@ -442,7 +465,7 @@ def generisiSvaMogucaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py
         tmpStanje = generisiNovoStanjeZaUlazniPotez(
             graf, m, n, startPoz, stringG, naPotezu, pobeda, px1, px2, py1, py2)
         if tmpStanje[2]:
-            listaStanja.append(tmpStanje[1])
+            listaStanja=listaStanja+tmpStanje[1]
 
     for tx, ty in zip([1, -1, 1, -1], [1, -1, -1, 1]):
         p = (startPozInt[0] + tx, startPozInt[1] + ty)
@@ -450,7 +473,7 @@ def generisiSvaMogucaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py
         tmpStanje = generisiNovoStanjeZaUlazniPotez(
             graf, m, n, startPoz, stringP, naPotezu, pobeda, px1, px2, py1, py2)
         if tmpStanje[2]:
-            listaStanja.append(tmpStanje[1])
+            listaStanja=listaStanja+tmpStanje[1]
     return listaStanja
 
 
@@ -512,7 +535,7 @@ def minimax(graph, depth, alpha, beta, maximizing_player, naPotezu, m, n, pobeda
     if maximizing_player: #pov->robot      najbolji potez za robota
         max_eval = -math.inf        
         for child in children:
-            graph_copy = graph.copy()
+            
             naPotezuu='x' if naPotezu=='y' else 'y'
             current_eval = minimax(child, depth - 1, alpha, beta, False, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
             if current_eval > max_eval:
@@ -526,9 +549,9 @@ def minimax(graph, depth, alpha, beta, maximizing_player, naPotezu, m, n, pobeda
     else:
         min_eval = math.inf
         for child in children:
-            graph_copy = graph.copy()
+            
             naPotezuu='x' if naPotezu=='y' else 'y'
-            current_eval = minimax(graph_copy, depth - 1, alpha, beta, True, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
+            current_eval = minimax(child, depth - 1, alpha, beta, True, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
             if current_eval < min_eval:
                 min_eval = current_eval
                 best_move = child
