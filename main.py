@@ -81,7 +81,7 @@ def generisiGraf(m, n, nizZidova, listaPoz, pobedaA1, pobedaA2, pobedaB1, pobeda
 def unesiZidove(graf, listaZidova, m, n):  # zeljko
 
     if '9' in listaZidova[0][0] or '9' in listaZidova[0][1]:
-        a=10
+        a = 10
     if '10' in listaZidova[0][0] or '10' in listaZidova[0][1]:
         a = 10
     v_h = listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]
@@ -91,9 +91,9 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
             if(str(str(int(listaZidova[0][1].split(',')[0])+1)+','+listaZidova[0][1].split(',')[1]) not in graf[listaZidova[0][1]][1]):
                 return False
     else:
-       if listaZidova[0][1] not in graf[listaZidova[0][0]][1]:
-           if listaZidova[0][0] not in graf[listaZidova[0][1]][1]:
-               return False
+        if listaZidova[0][1] not in graf[listaZidova[0][0]][1]:
+            if listaZidova[0][0] not in graf[listaZidova[0][1]][1]:
+                return False
 
         # if(str((str((int(listaZidova[0][0].split(',')[0])+1)))+',' + str(int(listaZidova[0][0].split(',')[1]))) not in graf[listaZidova[0][0]][1]):
         #     if(str(listaZidova[0][1].split(',')[0]+','+str(int(listaZidova[0][1].split(',')[1])+1)) not in graf[listaZidova[0][1]][1]):
@@ -141,7 +141,7 @@ def pomocnoBrisanje(a, b, c, d, listaZidova, graf, m, n):  # zeljko
     y1[0] = int(y1[0]) + c
     y1[1] = int(y1[1]) + d
     novaLista = (str(x1[0]) + ',' + str(x1[1]),
-                  str(y1[0]) + ',' + str(y1[1]))
+                 str(y1[0]) + ',' + str(y1[1]))
     if 0 == int(novaLista[0].split(",")[0]) or 0 == int(novaLista[0].split(",")[1]) or 0 == int(novaLista[1].split(",")[0]) or 0 == int(novaLista[1].split(",")[1]):
         return
     if n+1 == int(novaLista[0].split(",")[0]) or m+1 == int(novaLista[0].split(",")[1]) or n+1 == int(novaLista[1].split(",")[0]) or m+1 == int(novaLista[1].split(",")[1]):
@@ -197,8 +197,8 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz):  # filip
 
     for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
         g = (trenutno[0] + dx, trenutno[1] + dy)
-        if g == (10,8):
-            a=3
+        if g == (10, 8):
+            a = 3
         if (g == ciljno):
             for node in graf[startPoz][1]:
                 if(node.split(",")[0] != startPoz.split(",")[0] and node.split(",")[1] != startPoz.split(",")[1]):
@@ -315,9 +315,9 @@ def proveriPobednika(pobedaPravilnoTuple):  # filip
 
 def generisiNovoStanjeZaUlazniPotez(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px1, px2, py1, py2):
     if endPoz == "3,6":
-        a=10
+        a = 10
     if naPotezu == 'y':
-        a=10
+        a = 10
     igrac = graf[startPoz][0]
     if(igrac != naPotezu):
         return (False, False, False)
@@ -340,22 +340,22 @@ def generisiNovoStanjeZaUlazniPotez(graf, m, n, startPoz, endPoz, naPotezu, pobe
 
     listaGrafova = []
 
-    #horizontalni zidovi
+    # horizontalni zidovi
     for i in range(1, m):
         for j in range(1, n):
             novinoviGraf = noviGraf.copy()
             if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i+1)+','+str(j))], m, n):
-                stampajGraf(novinoviGraf, m, n)
+                #stampajGraf(novinoviGraf, m, n)
                 if isClosedPath([px1, px2, py1, py2], novinoviGraf):
                     listaGrafova.append(novinoviGraf)
                 else:
                     a = 10
-    #vertikalni zidovi
+    # vertikalni zidovi
     for i in range(1, m):
         for j in range(1, n):
             novinoviGraf = noviGraf.copy()
             if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i)+','+str(j+1))], m, n):
-                stampajGraf(novinoviGraf, m, n)
+                #stampajGraf(novinoviGraf, m, n)
                 if isClosedPath([px1, px2, py1, py2], novinoviGraf):
                     listaGrafova.append(novinoviGraf)
                 else:
@@ -401,8 +401,6 @@ def generisiSvaMogucaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py
 
 def pozicijePijuna(graph):
     sp = []
-    countx = 0
-    county = 0
     for i in graph:
         if graph[i][0] == 'x':
             sp = [i]+sp
@@ -412,7 +410,7 @@ def pozicijePijuna(graph):
     return sp
 
 
-def minimax(graph, depth, alpha, beta, maximizing_player, naPotezu, m, n, pobeda, px1, px2, py1, py2):
+def minMax(graph, depth, alpha, beta, maximizing_player, naPotezu, m, n, pobeda, px1, px2, py1, py2):
 
     if depth == 0:
         return None,  random.randint(-100, 100)
@@ -440,7 +438,7 @@ def minimax(graph, depth, alpha, beta, maximizing_player, naPotezu, m, n, pobeda
         for child in children:
 
             naPotezuu = 'x' if naPotezu == 'y' else 'y'
-            current_eval = minimax(child, depth - 1, alpha, beta,
+            current_eval = minMax(child, depth - 1, alpha, beta,
                                    False, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
             if current_eval > max_eval:
                 max_eval = current_eval
@@ -455,7 +453,7 @@ def minimax(graph, depth, alpha, beta, maximizing_player, naPotezu, m, n, pobeda
         for child in children:
 
             naPotezuu = 'x' if naPotezu == 'y' else 'y'
-            current_eval = minimax(child, depth - 1, alpha, beta,
+            current_eval = minMax(child, depth - 1, alpha, beta,
                                    True, naPotezuu, m, n, pobeda, px1, px2, py1, py2)[1]
             if current_eval < min_eval:
                 min_eval = current_eval
@@ -500,9 +498,10 @@ def gameLoop():  # filip
         M, N, ["1,1", "4,5", "8,8", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
 
-    pommmmm = minimax(graf, 2, -math.inf, math.inf, True, 'x',
+    pommmmm = minMax(graf, 2, -math.inf, math.inf, True, 'x',
                       M, N, False, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
     print(pommmmm)
+    stampajGraf(pommmmm[0], M, N)
 
     while True:
         print(f"NA POTEZU JE IGRAC {trenutniIgrac}: ")
