@@ -109,8 +109,8 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         return False
 
     obrisi(listaZidova, graf, m, n)
-    print(listaZidova[0][0].split(',')[0])
-    print(listaZidova[0][1].split(',')[1])
+    #print(listaZidova[0][0].split(',')[0])
+    #print(listaZidova[0][1].split(',')[1])
 
     if(listaZidova[0][0].split(',')[0] == listaZidova[0][1].split(',')[0]):
         pomocnoBrisanje(1, 0, 1, 0, listaZidova, graf, m, n)
@@ -495,7 +495,7 @@ def gameLoop():  # filip
     # M = 12
     # N = 14
     graf = SetujPocetnoStanje(
-        M, N, ["1,1", "4,5", "8,8", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
+        M, N, ["1,1", "4,5", "6,8", "2,5"], pobedaA1, pobedaB1, pobedaA2, pobedaB2)
     stampajGraf(graf, M, N)
 
     pommmmm = minMax(graf, 2, -math.inf, math.inf, True, 'x',
@@ -503,70 +503,86 @@ def gameLoop():  # filip
     print(pommmmm)
     stampajGraf(pommmmm[0], M, N)
 
+#    stampajGraf(pommmmm[0], M, N)
+
     while True:
         print(f"NA POTEZU JE IGRAC {trenutniIgrac}: ")
-        print("Selektujte polje sa igracem koga pomerate: ")
-        startnaPoz = input()
+        if trenutniIgrac=='x':
+            
+            print("Selektujte polje sa igracem koga pomerate: ")
+            startnaPoz = input()
 
-        print("Na koje polje: ")
-        destinacija = input()
+            print("Na koje polje: ")
+            destinacija = input()
 
-        if BrojZidova > 0:
-            print("Unesite gde postavljate zid: ")
-            zid1 = input()
-            zid2 = input()
+            if BrojZidova > 0:
+                print("Unesite gde postavljate zid: ")
+                zid1 = input()
+                zid2 = input()
 
-            if not re.search(pattern, zid1):
-                print("Unesite pravilno polje za zid1!")
+                if not re.search(pattern, zid1):
+                    print("Unesite pravilno polje za zid1!")
+                    continue
+
+                if not re.search(pattern, zid2):
+                    print("Unesite pravilno polje za zid2!")
+                    continue
+
+            if not re.search(pattern, startnaPoz):
+                print("Unesite pravilno polje za startnu poziciju!")
                 continue
 
-            if not re.search(pattern, zid2):
-                print("Unesite pravilno polje za zid2!")
+            if not re.search(pattern, destinacija):
+                print("Unesite pravilno polje za krajnju poziciju!")
                 continue
 
-        if not re.search(pattern, startnaPoz):
-            print("Unesite pravilno polje za startnu poziciju!")
-            continue
+            grafCopy = graf.copy()
 
-        if not re.search(pattern, destinacija):
-            print("Unesite pravilno polje za krajnju poziciju!")
-            continue
-
-        # Testiranje metode generisiSvaMogucaStanja
-        # lista = generisiSvaMogucaStanja(graf, M, N, "10,14", "y",
-        #                           pobeda, pobedaA1, pobedaB1, pobedaA2, pobedaB2)
-
-        grafCopy = graf.copy()
-
-        pobedaPravilnoTuple = pomeriIGraca(
-            graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda, pobedaA1, pobedaB1, pobedaA2, pobedaB2)
-        if(not pobedaPravilnoTuple[1]):
-            graf = grafCopy
-            print(f"Nepravilno kretanje, na potezu je {trenutniIgrac}!")
-            continue
-        if BrojZidova > 0:
-            validanZid = unesiZidove(graf, [(zid1, zid2)], M, N)
-            if not validanZid:
+            pobedaPravilnoTuple = pomeriIGraca(
+                graf, M, N, startnaPoz, destinacija, trenutniIgrac, pobeda, pobedaA1, pobedaB1, pobedaA2, pobedaB2)
+            if(not pobedaPravilnoTuple[1]):
                 graf = grafCopy
-                print("Nepravilno unesen zid")
+                print(f"Nepravilno kretanje, na potezu je {trenutniIgrac}!")
                 continue
-            if not isClosedPath((pobedaA1, pobedaA2, pobedaB1, pobedaB2), graf):
-                graf = grafCopy
-                print(
-                    "Unosenje ovog zida dovodi do zatvaranja cilja, unesite pravilan zid")
-                continue
+            if BrojZidova > 0:
+                validanZid = unesiZidove(graf, [(zid1, zid2)], M, N)
+                if not validanZid:
+                    graf = grafCopy
+                    print("Nepravilno unesen zid")
+                    continue
+                if not isClosedPath((pobedaA1, pobedaA2, pobedaB1, pobedaB2), graf):
+                    graf = grafCopy
+                    print(
+                        "Unosenje ovog zida dovodi do zatvaranja cilja, unesite pravilan zid")
+                    continue
 
-        trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
-        BrojZidova -= 1
-        #pobeda = pobedaPravilnoTuple[0]
-        if proveriPobednika(pobedaPravilnoTuple):
-            break
-        # lista = {}
-        # for i in graf:
-        #     lista[i] = (graf[i][1])
-        # g = nx.Graph(lista)
-        # nx.draw(g, with_labels=True)
-        # plt.show()
+            trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
+            BrojZidova -= 1
+            
+            if proveriPobednika(pobedaPravilnoTuple):
+                break
+        else:
+            graf=minMax(graf, 1, -math.inf, math.inf, False, 'y',
+                      M, N, pobeda, pobedaA1, pobedaA2, pobedaB1, pobedaB2)[0]
+            
+            if graf[pobedaA1][0]!=0:
+                if graf[pobedaA1][0]=='x':
+                    break
+            if graf[pobedaA2][0]!=0:
+                if graf[pobedaA2][0]=='x':
+                    break
+            if graf[pobedaB1][0]!=0:
+                if graf[pobedaB1][0]=='y':
+                    break
+            if graf[pobedaB2][0]!=0:
+                if graf[pobedaB2][0]=='y':
+                    break
+
+            trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
+            BrojZidova -= 1
+
+        
+        
         stampajGraf(graf, M, N)
 
     print("Pobednik je : " + "x" if trenutniIgrac == "y" else "y")
