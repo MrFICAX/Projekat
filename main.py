@@ -666,4 +666,50 @@ def gameLoop():  # filip
     print("Pobednik je : " + "x" if trenutniIgrac == "y" else "y")
 
 
+def bestSearch(graph, start, goal):
+    if start == goal:
+        path = PriorityQueue(1)
+        path.put(start)
+        return path
+
+    destinationStack = PriorityQueue(len(graph))
+    visited = set()
+    found = False
+    visited.add(start)
+    destinationStack.put((heauritikaZaTrazenjeputa(start, goal), start))
+    previous = {}
+    previous[start] = None
+
+    while (not found and not destinationStack.empty()):
+        node = destinationStack.get()
+
+        for child in graph[node[1]][1]:
+            if child not in visited:
+                destinationStack.put((heauritikaZaTrazenjeputa(child, goal), child))
+                previous[child] = node[1]
+                if child == goal:
+                    found = True
+                    break
+                visited.add(child)
+
+    path = list()
+
+    if (found):
+        path.append(goal)
+        prev = previous[goal]
+        while prev is not None:
+            path.append(prev)
+            prev = previous[prev]
+    path.reverse()
+    return len(path)
+
+def heauritikaZaTrazenjeputa(tacka1, tacka2):
+    x1=int(tacka1.split(',')[0]);
+    y1 = int(tacka1.split(',')[1]);
+    x2 = int(tacka2.split(',')[0]);
+    y2 = int(tacka2.split(',')[1]);
+
+    return sqrt(pow(x1-x2,2)+pow(y1-y2, 2)) #Ovo vraca udaljenost dva cvora i koristi se kao heuristika u trazenju najkraceg puta
+
+
 gameLoop()
