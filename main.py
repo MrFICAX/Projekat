@@ -390,6 +390,84 @@ def generisiSvaMogucaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py
             listaStanja = listaStanja+tmpStanje[1]
     return listaStanja
 
+def generisiLogicnaStanjaZaUlazniPotezPijuna(graf, m, n, startPoz, endPoz, naPotezu, pobeda, px1, px2, py1, py2):
+    if endPoz == "3,6":
+        a = 10
+    if naPotezu == 'y':
+        a = 10
+    igrac = graf[startPoz][0]
+    if(igrac != naPotezu):
+        return (False, False, False)
+    noviGraf = graf.copy()
+    endPozInt = (int(endPoz.split(',')[0]), int(endPoz.split(',')[1]))
+    startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
+    if(endPozInt[0] >= 1 and endPozInt[0] <= m and endPozInt[1] >= 1 and endPozInt[1] <= n):
+        ValidiranPokret = validacijaPokreta(
+            noviGraf, startPozInt, endPozInt, endPoz, startPoz)
+        if ValidiranPokret:
+            if (endPoz == px1 or endPoz == px2) and naPotezu == "x":
+                pobeda = True
+            elif (endPoz == py1 or endPoz == py2) and naPotezu == 'y':
+                pobeda = True
+            noviGraf[startPoz] = (0, noviGraf[startPoz][1])
+            noviGraf[endPoz] = (igrac, noviGraf[endPoz][1])
+    else:
+        ValidiranPokret = False
+        return pobeda, [], ValidiranPokret
+
+    listaGrafova = []
+
+    # horizontalni zidovi
+    for i in range(1, m):
+        for j in range(1, n):
+            novinoviGraf = noviGraf.copy()
+            if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i+1)+','+str(j))], m, n):
+                #stampajGraf(novinoviGraf, m, n)
+                if isClosedPath([px1, px2, py1, py2], novinoviGraf):
+                    listaGrafova.append(novinoviGraf)
+                else:
+                    a = 10
+    # vertikalni zidovi
+    for i in range(1, m):
+        for j in range(1, n):
+            novinoviGraf = noviGraf.copy()
+            if unesiZidove(novinoviGraf, [(str(i)+','+str(j), str(i)+','+str(j+1))], m, n):
+                #stampajGraf(novinoviGraf, m, n)
+                if isClosedPath([px1, px2, py1, py2], novinoviGraf):
+                    listaGrafova.append(novinoviGraf)
+                else:
+                    a = 10
+
+    ret = (pobeda, listaGrafova, ValidiranPokret)
+
+    return ret
+
+
+def generisiSvaLogicnaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py1, py2):
+
+    if graf[startPoz][0] != naPotezu:
+        print("Na prosledjenoj startnoj poziciji se ne nalazi igrac koji treba da bude na potezu")
+        return []
+    listaStanja = []
+    startPozInt = (int(startPoz.split(',')[0]), int(startPoz.split(',')[1]))
+    for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
+        g = (startPozInt[0] + dx, startPozInt[1] + dy)
+        stringG = f"{g[0]},{g[1]}"
+        tmpStanje = generisiLogicnaStanjaZaUlazniPotezPijuna(
+            graf, m, n, startPoz, stringG, naPotezu, pobeda, px1, px2, py1, py2)
+        if tmpStanje[2]:
+            listaStanja = listaStanja+tmpStanje[1]
+
+    for tx, ty in zip([1, -1, 1, -1], [1, -1, -1, 1]):
+        p = (startPozInt[0] + tx, startPozInt[1] + ty)
+        stringP = f"{p[0]},{p[1]}"
+        tmpStanje = generisiLogicnaStanjaZaUlazniPotezPijuna(
+            graf, m, n, startPoz, stringP, naPotezu, pobeda, px1, px2, py1, py2)
+        if tmpStanje[2]:
+            listaStanja = listaStanja+tmpStanje[1]
+    return listaStanja
+
+
 # covek
 #x1, x2
 
@@ -503,7 +581,7 @@ def gameLoop():  # filip
     print(pommmmm)
     stampajGraf(pommmmm[0], M, N)
 
-#    stampajGraf(pommmmm[0], M, N)
+    #stampajGraf(pommmmm[0], M, N)
 
     while True:
         print(f"NA POTEZU JE IGRAC {trenutniIgrac}: ")
