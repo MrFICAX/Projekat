@@ -1,3 +1,5 @@
+from ast import If
+from tracemalloc import start
 import networkx as nx
 import matplotlib.pyplot as plt
 import re
@@ -480,9 +482,11 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
         ValidiranPokret = False
         return pobeda, [], ValidiranPokret
 
+    if pobeda == True:
+       return (pobeda, [noviGraf], ValidiranPokret)
     listaGrafova = []
 
-    pozicijeXiY = pozicijePijuna(graf)
+    pozicijeXiY = pozicijePijuna(noviGraf)
     listaNajkracihPuteva = []
     minPovratnaVrednost = 100
     tmpMin = 300
@@ -495,28 +499,28 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
     if naPotezu == "x":
 
         # poziv za protivnikove figure
-        tmpMin = bestSearch(graf, m, n, pozicijeXiY[2], py1)
+        tmpMin = bestSearch(noviGraf, m, n, pozicijeXiY[2], py1)
         if tmpMin > 0:
             if tmpMin < minPovratnaVrednost:
                 minPovratnaVrednost = tmpMin
                 IzabranaY = pozicijeXiY[2]
                 IzabranoCiljno = py1
                 # listaNajkracihPuteva.append(povratnaVr)
-        tmpMin = bestSearch(graf, m, n, pozicijeXiY[3], py1)
+        tmpMin = bestSearch(noviGraf, m, n, pozicijeXiY[3], py1)
         if tmpMin > 0:
             if tmpMin < minPovratnaVrednost:
                 minPovratnaVrednost = tmpMin            
                 IzabranaY = pozicijeXiY[3]
                 IzabranoCiljno = py1
                 # listaNajkracihPuteva.append(povratnaVr)
-        tmpMin = bestSearch(graf, m, n, pozicijeXiY[2], py2)
+        tmpMin = bestSearch(noviGraf, m, n, pozicijeXiY[2], py2)
         if tmpMin > 0:
             if tmpMin < minPovratnaVrednost:
                 minPovratnaVrednost = tmpMin            
                 IzabranaY = pozicijeXiY[3]
                 IzabranoCiljno = py2
                 # listaNajkracihPuteva.append(povratnaVr)
-        tmpMin = bestSearch(graf, m, n, pozicijeXiY[3], py2)
+        tmpMin = bestSearch(noviGraf, m, n, pozicijeXiY[3], py2)
         if tmpMin > 0:
             if tmpMin < minPovratnaVrednost:
                 minPovratnaVrednost = tmpMin            
@@ -527,37 +531,37 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
         IzabranaYx = IzabranaY.split(",")[0]
         IzabranaYy = IzabranaY.split(",")[1]
         IzabranoCiljnox = IzabranoCiljno.split(",")[0]
-        IzabranoCiljnoy = IzabranoCiljno.split(",")[y]
+        IzabranoCiljnoy = IzabranoCiljno.split(",")[1]
 
         minX = IzabranaYx if IzabranaYx < IzabranoCiljnox else IzabranoCiljnox
         minY = IzabranaYy if IzabranaYy < IzabranoCiljnoy else IzabranoCiljnoy
         maxX = IzabranaYx if IzabranaYx > IzabranoCiljnox else IzabranoCiljnox
-        minY = IzabranaYy if IzabranaYy > IzabranoCiljnoy else IzabranoCiljnoy
+        maxY = IzabranaYy if IzabranaYy > IzabranoCiljnoy else IzabranoCiljnoy
 
     else:
         # poziv za protivnikove figure
-        tmpMin = bestSearch(graf, m, n, pozicijeXiY[0], px1)
+        tmpMin = bestSearch(noviGraf, m, n, pozicijeXiY[0], px1)
         if tmpMin > 0:
             if tmpMin < minPovratnaVrednost:
                 minPovratnaVrednost = tmpMin            
                 IzabranaX = pozicijeXiY[0]
                 IzabranoCiljno = px1
                 # listaNajkracihPuteva.append(povratnaVr)
-        tmpMin = bestSearch(graf, m, n, pozicijeXiY[1], px1)
+        tmpMin = bestSearch(noviGraf, m, n, pozicijeXiY[1], px1)
         if tmpMin > 0:
             if tmpMin < minPovratnaVrednost:
                 minPovratnaVrednost = tmpMin                        
                 IzabranaX = pozicijeXiY[1]
                 IzabranoCiljno = px1
                 # listaNajkracihPuteva.append(povratnaVr)
-        tmpMin = bestSearch(graf, m, n, pozicijeXiY[0], px2)
+        tmpMin = bestSearch(noviGraf, m, n, pozicijeXiY[0], px2)
         if tmpMin > 0:
             if tmpMin < minPovratnaVrednost:
                 minPovratnaVrednost = tmpMin            
                 IzabranaX = pozicijeXiY[0]
                 IzabranoCiljno = px2
                 # listaNajkracihPuteva.append(povratnaVr)
-        tmpMin = bestSearch(graf, m, n, pozicijeXiY[1], px2)
+        tmpMin = bestSearch(noviGraf, m, n, pozicijeXiY[1], px2)
         if tmpMin > 0:
             if tmpMin < minPovratnaVrednost:
                 minPovratnaVrednost = tmpMin            
@@ -575,9 +579,18 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
         maxX = int(IzabranaXx if IzabranaXx > IzabranoCiljnox else IzabranoCiljnox)
         maxY = int(IzabranaXy if IzabranaXy > IzabranoCiljnoy else IzabranoCiljnoy)
         dodatak = 1
+        if minX > 2:
+            minX = minX - dodatak
+        if minY > 2:
+            minY = minY - dodatak
+        if maxX < m - 1:
+            maxX = maxX + dodatak
+        if minY < n - 1:
+            maxY = maxY + dodatak
+
     # horizontalni zidovi
-    for i in range(minX - dodatak, maxX + dodatak):
-        for j in range(minY - dodatak, maxY + dodatak):
+    for i in range(minX, maxX):
+        for j in range(minY, maxY):
             novinoviGraf = noviGraf.copy()
             if unesiZidove(
                 novinoviGraf, [(str(i) + "," + str(j), str(i + 1) + "," + str(j))], m, n
@@ -587,8 +600,8 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
                     listaGrafova.append(novinoviGraf)
 
     # vertikalni zidovi
-    for i in range(minX - dodatak, maxX + dodatak):
-        for j in range(minY - dodatak, maxY + dodatak):
+    for i in range(minX, maxX):
+        for j in range(minY, maxY):
             novinoviGraf = noviGraf.copy()
             if unesiZidove(
                 novinoviGraf, [(str(i) + "," + str(j), str(i) + "," + str(j + 1))], m, n
@@ -621,6 +634,8 @@ def generisiSvaLogicnaStanja(
         )
         if tmpStanje[2]:
             listaStanja = listaStanja + tmpStanje[1]
+            if tmpStanje[0] == True:
+                return listaStanja
 
     for tx, ty in zip([1, -1, 1, -1], [1, -1, -1, 1]):
         p = (startPozInt[0] + tx, startPozInt[1] + ty)
@@ -630,6 +645,8 @@ def generisiSvaLogicnaStanja(
         )
         if tmpStanje[2]:
             listaStanja = listaStanja + tmpStanje[1]
+            if tmpStanje[0] == True:
+                return listaStanja
     return listaStanja
 
 
@@ -784,13 +801,13 @@ def gameLoop():  # filip
     B2x = int(2 * M / 3)
     B2y = int(2 * N / 3)
     pobedaA1 = f"{A1x},{A1y}"
-    pobedaB1 = f"{A2x},{A2y}"
-    pobedaA2 = f"{B1x},{B1y}"
+    pobedaA2 = f"{A2x},{A2y}"
+    pobedaB1 = f"{B1x},{B1y}"
     pobedaB2 = f"{B2x},{B2y}"
     # M = 12
     # N = 14
     graf = SetujPocetnoStanje(
-        M, N, ["1,1", "7,7", "2,2", "9,12"], pobedaA1, pobedaB1, pobedaA2, pobedaB2
+        M, N, ["1,1", "7,7", "2,2", "9,12"], pobedaA1, pobedaA2, pobedaB1, pobedaB2
     )
     stampajGraf(graf, M, N)
 
@@ -847,8 +864,8 @@ def gameLoop():  # filip
                 trenutniIgrac,
                 pobeda,
                 pobedaA1,
-                pobedaB1,
                 pobedaA2,
+                pobedaB1,
                 pobedaB2,
             )
             if not pobedaPravilnoTuple[1]:
@@ -886,8 +903,8 @@ def gameLoop():  # filip
                 pobeda,
                 pobedaA1,
                 pobedaA2,
-                pobedaB1,
-                pobedaB2,
+                pobedaB1, 
+                pobedaB2
             )[0]
 
             if graf[pobedaA1][0] != 0:
@@ -916,8 +933,11 @@ def heuristika(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2):
     startPoz = pozicijePijuna(graf)
     minBrKorakaDoCilja = 0
     minBrKorakaDoCiljaProtivnika = 0
+    GranicnaHeuristika = 500
     listaNajkracihPuteva = []
     if naPotezu == "x":
+        if startPoz[2] == pobedaB1 or startPoz[2] == pobedaB2 or startPoz[3] == pobedaB1 or startPoz[3] == pobedaB2:
+            return -GranicnaHeuristika
         povratnaVr = bestSearch(graf, m, n, startPoz[0], pobedaA1)
         if povratnaVr > 0:
             listaNajkracihPuteva.append(povratnaVr)
@@ -946,8 +966,18 @@ def heuristika(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2):
         if povratnaVr > 0:
             listaNajkracihPuteva.append(povratnaVr)
         minBrKorakaDoCiljaProtivnika = list(sorted(listaNajkracihPuteva))[0]
+        konacnaVrednost = 1/minBrKorakaDoCilja * 100
+        konacnaVrednost = konacnaVrednost - 1/minBrKorakaDoCiljaProtivnika * 100
 
+        # if(minBrKorakaDoCiljaProtivnika == 1):
+        #     a = 10
+        # print("ODREDJUJEM HEURISTIKU:")
+        # stampajGraf(graf, m, n)
+        # print("vrednost heuristike je " + str(konacnaVrednost))
+        return konacnaVrednost
     else:
+        if startPoz[0] == pobedaA1 or startPoz[0] == pobedaA2 or startPoz[1] == pobedaA1 or startPoz[1] == pobedaA2:
+            return GranicnaHeuristika
         povratnaVr = bestSearch(graf, m, n, startPoz[2], pobedaB1)
         if povratnaVr > 0:
             listaNajkracihPuteva.append(povratnaVr)
@@ -977,9 +1007,9 @@ def heuristika(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2):
             listaNajkracihPuteva.append(povratnaVr)
         minBrKorakaDoCiljaProtivnika = list(sorted(listaNajkracihPuteva))[0]
 
-    konacnaVrednost = minBrKorakaDoCilja * 100
-    konacnaVrednost = konacnaVrednost - minBrKorakaDoCiljaProtivnika * 100
-    return konacnaVrednost
+    konacnaVrednost = 1/minBrKorakaDoCilja * 100
+    konacnaVrednost = konacnaVrednost - 1/minBrKorakaDoCiljaProtivnika * 100
+    return  - konacnaVrednost
 
 
 def bestSearch(graf, m, n, start, goal):
