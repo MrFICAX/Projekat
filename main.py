@@ -359,14 +359,14 @@ def ProveriDaLiPostojiVeza(graf, listaZidova, m, n):
         or 0 >= int(y1[0])
         or 0 >= int(y1[1])
     ):
-        return False
+        return True #VRACAMO TRUE - KAO DA POSTOJE ZIDOVI, DA SE NE BI IZVRSILA FUNKCIJA POMOCNOBRISANJE JER JE GRANICNI SLUCAJ
     if (
        m+1 == int(x1[0])
-        or m+1 == int(x1[1])
-        or n+1 == int(y1[0])
+        or n+1 == int(x1[1])
+        or m+1 == int(y1[0])
         or n+1 == int(y1[1])
        ):
-        return False
+        return True  # VRACAMO TRUE - KAO DA POSTOJE ZIDOVI, DA SE NE BI IZVRSILA FUNKCIJA POMOCNOBRISANJE JER JE GRANICNI SLUCAJ
     # if graf[x1].contains(y1)
     if listaZidova[0][0] in graf[listaZidova[0][1]][1]:
         return True
@@ -765,7 +765,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
 
 ############################################################################
 ##########LOGIKA ZA GENERISANJE MOGUCIH POTEZA##############################
-    pozicijeXiY = pozicijePijuna(noviGraf)
+    pozicijeXiY = pozicijePijuna(noviGraf, px1, px2, py1, py2)
     minPovratnaVrednost = 100
     tmpMin = 300
     IzabranaY = ""
@@ -1026,6 +1026,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
                                     listaGrafova.append(novinoviGraf)
                                     flag = False
                     if KompjuterHorizontalniZidovi > 0:
+                        novinoviGraf = noviGraf.copy()
                         if unesiZidove(
                             novinoviGraf, [
                                 (str(i) + "," + str(j), str(i + 1) + "," + str(j))], m, n
@@ -1133,14 +1134,25 @@ def generisiSvaLogicnaStanja(
     return [False, listaStanja]
 
 
-def pozicijePijuna(graph):
+def pozicijePijuna(graph, pobedaA1, pobedaA2, pobedaB1, pobedaB2):
     sp = []
     for i in graph:
         if graph[i][0] == "x":
             sp = [i] + sp
+    if len(sp) != 2:
+        if graph[pobedaB1][0] == "b":
+            sp = [pobedaB2] + sp
+        else:
+            sp = [pobedaB1] + sp
+
+    for i in graph:
         if graph[i][0] == "y":
             sp = sp + [i]
-
+    if len(sp) != 4:
+        if graph[pobedaA1][0] == "a":
+            sp = [pobedaA2] + sp
+        else:
+            sp = [pobedaA1] + sp
     return sp
 
 
@@ -1194,7 +1206,7 @@ def minMax(
 
     children = list()
 
-    startPoz = pozicijePijuna(graph)
+    startPoz = pozicijePijuna(graph, px1, px2, py1, py2)
     if depth == 1:
         a =10
     if maximizing_player:
@@ -1463,7 +1475,7 @@ def gameLoop():  # filip
             if KompjuterHorizontalniZidovi != 0 or KompjuterVertikalniZidovi != 0:
                 graf = minMax(
                         graf,
-                        1,
+                        2,
                         -math.inf,
                         math.inf,
                         False,
@@ -1535,7 +1547,7 @@ def proveriPrelazakPrekoPobednickePozicije(graf, pobedaA1, pobedaA2, pobedaB1, p
 
 def VratiBrojKorakaDoCilja(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2):
     # stampajGraf(graf,m,n)
-    startPoz = pozicijePijuna(graf)
+    startPoz = pozicijePijuna(graf, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
     minBrKorakaDoCilja = 100
     minKorakaPovratno = 100
     IzabranaFigura = ""
@@ -1603,7 +1615,7 @@ def VratiBrojKorakaDoCilja(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, p
 
 def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2, minBrojKorakaDoCilja, IzabranaFigura):
     # stampajGraf(graf,m,n)
-    startPoz = pozicijePijuna(graf)
+    startPoz = pozicijePijuna(graf, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
     tmpMinBrojKoraka = 1000
     MinPovratnaVrednost = 100
     listaNajkracihPuteva = []
@@ -1668,7 +1680,7 @@ def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, 
 
 
 def heuristika(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2):
-    startPoz = pozicijePijuna(graf)
+    startPoz = pozicijePijuna(graf, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
     minBrKorakaDoCilja = 0
     minBrKorakaDoCiljaProtivnika = 0
     GranicnaHeuristika = 500
