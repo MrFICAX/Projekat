@@ -86,6 +86,23 @@ def generisiGraf(
 
 def unesiZidove(graf, listaZidova, m, n):  # zeljko
 
+    x1 = list(listaZidova[0][0].split(","))
+    y1 = list(listaZidova[0][1].split(","))
+    if (
+        0 >= int(x1[0])
+        or 0 >= int(x1[1])
+        or 0 >= int(y1[0])
+        or 0 >= int(y1[1])
+    ):
+        return False  
+    if (
+       m+1 <= int(x1[0])
+        or n+1 <= int(x1[1])
+        or m+1 <= int(y1[0])
+        or n+1 <= int(y1[1])
+       ):
+        return False
+
     if listaZidova[0][0].split(",")[0] == listaZidova[0][1].split(",")[0] and listaZidova[0][0].split(",")[1] == listaZidova[0][1].split(",")[1]:
         return False
 
@@ -347,6 +364,19 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         if not ProveriDaLiPostojiVeza(graf, novaListaZidova4, m, n):
             pomocnoBrisanje(0, +2, 0, +1, listaZidova, graf, m, n)
 
+        # x1 = list(listaZidova[0][0].split(","))
+        # y1 = list(listaZidova[0][1].split(","))
+        # x11 = int(x1[0])
+        # x12 = int(x1[1]) - 1
+        # y11 = int(y1[0])
+        # y12 = int(y1[1]) - 1
+        # novaListaZidova1 = [(str(x11)+","+str(x12), str(y11)+","+str(y12))]
+
+        # if not ProveriDaLiPostojiVeza(graf, novaListaZidova1, m, n):
+        #     pomocnoBrisanje(0, 0, 0, -1, listaZidova, graf, m, n)
+        #     pomocnoBrisanje(0, -1, 0, 0, listaZidova, graf, m, n)
+
+
     return True
 
 
@@ -424,6 +454,24 @@ def SetujPocetnoStanje(
 def pomeriIGraca(
     graf, m, n, startPoz, endPoz, naPotezu, pobeda, px1, px2, py1, py2
 ):  # veljko
+
+    x1 = startPoz.split(",")[0]
+    y1 = startPoz.split(",")[1]
+    if (
+            0 >= int(x1)
+            or 0 >= int(y1)
+        ):
+            return (False, False)
+    if (
+        m+1 <= int(x1)
+            or n+1 <= int(x1)
+            or m+1 <= int(y1)
+            or n+1 <= int(y1)
+        ):
+            return (False, False)
+
+
+
     igrac = graf[startPoz][0]
     if igrac != naPotezu:
         return (False, False)
@@ -1475,7 +1523,7 @@ def gameLoop():  # filip
             if KompjuterHorizontalniZidovi != 0 or KompjuterVertikalniZidovi != 0:
                 graf = minMax(
                         graf,
-                        2,
+                        1,
                         -math.inf,
                         math.inf,
                         False,
@@ -1917,6 +1965,10 @@ def VratiTipPoslednjeUnetogZida(stariGraf, noviGraf):
     listaZidova = []
     Kopija3 = stariGraf.copy()
     Kopija4 = noviGraf.copy()
+    if goreLevo == '':
+        a=10
+        return None
+
     lista1 = Kopija1[goreLevo][1]
     lista2 = Kopija2[goreLevo][1]
     if(collections.Counter(lista1) != collections.Counter(lista2)):
