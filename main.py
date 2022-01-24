@@ -464,8 +464,6 @@ def pomeriIGraca(
             return (False, False)
     if (
         m+1 <= int(x1)
-            or n+1 <= int(x1)
-            or m+1 <= int(y1)
             or n+1 <= int(y1)
         ):
             return (False, False)
@@ -1228,6 +1226,11 @@ def pozicijePobednickihPolja():
     pobedaA2 = f"{A2x},{A2y}"
     pobedaB1 = f"{B1x},{B1y}"
     pobedaB2 = f"{B2x},{B2y}"
+
+    pobedaA1 = f"{B1x},{B1y}"
+    pobedaA2 = f"{B2x},{B2y}"
+    pobedaB1 = f"{A1x},{A1y}"
+    pobedaB2 = f"{A2x},{A2y}"
     sp = [pobedaA1, pobedaA2, pobedaB1, pobedaB2]
     return sp
 
@@ -1407,6 +1410,11 @@ def gameLoop():  # filip
     pobedaA2 = f"{A2x},{A2y}"
     pobedaB1 = f"{B1x},{B1y}"
     pobedaB2 = f"{B2x},{B2y}"
+
+    pobedaA1 = f"{B1x},{B1y}"
+    pobedaA2 = f"{B2x},{B2y}"
+    pobedaB1 = f"{A1x},{A1y}"
+    pobedaB2 = f"{A2x},{A2y}"
 
     graf = SetujPocetnoStanje(
         M, N, [pobedaB1, pobedaB2, pobedaA1, pobedaA2], pobedaA1, pobedaA2, pobedaB1, pobedaB2
