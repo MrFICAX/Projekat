@@ -2000,10 +2000,19 @@ def heuristikaZaTrazenjeputa(tacka1, tacka2):
     )  # Ovo vraca udaljenost dva cvora i koristi se kao heuristika u trazenju najkraceg puta
 
 
-print("Unesite M velicinu table (broj vrsta): ")
-M = int(input())
-print("Unesite N velicinu table (broj kolona): ")
-N = int(input())
+
+MainFlag = True
+while MainFlag:
+    print("Unesite M velicinu table (broj vrsta): ")
+    M = int(input())
+    print("Unesite N velicinu table (broj kolona): ")
+    N = int(input())
+
+    if N < 14 or N > 28 or M < 11 or M > 22:
+        MainFlag = True
+        print("Unesite brojeve u opsegu M=[11,22] i N=[14,28] !")
+    else:
+        MainFlag = False
 
 IgracVertikalniZidovi = 0
 IgracHorizontalniZidovi = 0
