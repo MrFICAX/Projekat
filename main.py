@@ -1364,8 +1364,16 @@ def gameLoop():  # filip
     trenutniIgrac = NaPotezu
     global M
     global N
-    print("Unesite broj vertikalnih/horizontalnih zidova koje poseduje svaki igrac: ")
-    BrojZidova = int(input())
+    ZidoviFlag = True
+    while ZidoviFlag:
+        print("Unesite broj vertikalnih/horizontalnih zidova koje poseduje svaki igrac: ")
+        BrojZidova = int(input())
+        if BrojZidova > 18 or BrojZidova < 0:
+            ZidoviFlag = True
+            print("Unesite broj zidova u opsegu [0,18]")
+        else:
+            ZidoviFlag = False
+
     global IgracVertikalniZidovi 
     IgracVertikalniZidovi = int(BrojZidova)
     global IgracHorizontalniZidovi 
