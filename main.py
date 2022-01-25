@@ -94,7 +94,7 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         or 0 >= int(y1[0])
         or 0 >= int(y1[1])
     ):
-        return False  
+        return False
     if (
        m+1 <= int(x1[0])
         or n+1 <= int(x1[1])
@@ -132,9 +132,9 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
                 + str(int(listaZidova[0][0].split(",")[1]) + 1)
             )
             not in graf[str(listaZidova[0][1].split(",")[0]
-                + ","
-                + str(int(listaZidova[0][1].split(",")[1]) + 1)
-            )][1]
+                            + ","
+                            + str(int(listaZidova[0][1].split(",")[1]) + 1)
+                            )][1]
         ):
             return False
 
@@ -151,7 +151,7 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
     if re.search(f".,{n}", listaZidova[0][1]) and not v_h:
         return False
     if v_h:
-        #AKO JE VERTIKALNI ZID UKRSTEN SA POSTOJECIM HORIZONTALNIM
+        # AKO JE VERTIKALNI ZID UKRSTEN SA POSTOJECIM HORIZONTALNIM
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0])
@@ -162,15 +162,15 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
 
         x11 = int(x1[0]) + 1
         x12 = int(x1[1]) + 1
-        y11 = int(y1[0]) 
-        y12 = int(y1[1]) 
+        y11 = int(y1[0])
+        y12 = int(y1[1])
         novaListaZidova2 = [(str(x11)+","+str(x12), str(y11)+","+str(y12))]
 
         # NOT zato sto proveravamo da li ne postoji veza, ukoliko ne postoji veza, znaci da postoji zid i da nije moguce kretati se po dijagonali
         if not ProveriDaLiPostojiVeza(graf, novaListaZidova1, m, n) and not ProveriDaLiPostojiVeza(graf, novaListaZidova2, m, n):
             return False
     else:
-        #AKO JE VERTIKALNI ZID UKRSTEN SA POSTOJECIM HORIZONTALNIM
+        # AKO JE VERTIKALNI ZID UKRSTEN SA POSTOJECIM HORIZONTALNIM
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0])
@@ -184,7 +184,6 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         y11 = int(y1[0])
         y12 = int(y1[1])
         novaListaZidova2 = [(str(x11)+","+str(x12), str(y11)+","+str(y12))]
-
 
         # NOT zato sto proveravamo da li ne postoji veza, ukoliko ne postoji veza, znaci da postoji zid i da nije moguce kretati se po dijagonali
         if not ProveriDaLiPostojiVeza(graf, novaListaZidova1, m, n) and not ProveriDaLiPostojiVeza(graf, novaListaZidova2, m, n):
@@ -227,8 +226,8 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
             pomocnoBrisanje(1, 0, 2, 0, listaZidova, graf, m, n)
             pomocnoBrisanje(2, 0, 1, 0, listaZidova, graf, m, n)
 
-        #Provera za ukrstanje vertikalnog i horizontalnog
-            #DA LI POSTOJI LEVI GORNJI ZID
+        # Provera za ukrstanje vertikalnog i horizontalnog
+            # DA LI POSTOJI LEVI GORNJI ZID
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0])
@@ -237,10 +236,11 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         y12 = int(y1[1]) - 1
         novaListaZidova3 = [(str(x11)+","+str(x12), str(y11)+","+str(y12))]
 
-        if not ProveriDaLiPostojiVeza(graf, novaListaZidova3, m, n): #AKO NE POSTOJI VEZA
+        # AKO NE POSTOJI VEZA
+        if not ProveriDaLiPostojiVeza(graf, novaListaZidova3, m, n):
             pomocnoBrisanje(0, 0, -1, 0, listaZidova, graf, m, n)
-            
-            #DA LI POSTOJI DESNI GORNJI ZID
+
+            # DA LI POSTOJI DESNI GORNJI ZID
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0])
@@ -253,11 +253,11 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         if not ProveriDaLiPostojiVeza(graf, novaListaZidova4, m, n):
             pomocnoBrisanje(-1, 0, 0, 0, listaZidova, graf, m, n)
 
-            #DA LI POSTOJI DONJI LEVI ZID
+            # DA LI POSTOJI DONJI LEVI ZID
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0]) + 1
-        x12 = int(x1[1]) 
+        x12 = int(x1[1])
         y11 = int(y1[0]) + 2
         y12 = int(y1[1]) - 1
         novaListaZidova4 = [(str(x11)+","+str(x12), str(y11)+","+str(y12))]
@@ -266,7 +266,7 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         if not ProveriDaLiPostojiVeza(graf, novaListaZidova4, m, n):
             pomocnoBrisanje(+1, 0, +2, 0, listaZidova, graf, m, n)
 
-            #DA LI POSTOJI DONJI DESNI ZID
+            # DA LI POSTOJI DONJI DESNI ZID
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0]) + 1
@@ -278,7 +278,6 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         # AKO NE POSTOJI VEZA
         if not ProveriDaLiPostojiVeza(graf, novaListaZidova4, m, n):
             pomocnoBrisanje(+2, 0, +1, 0, listaZidova, graf, m, n)
-
 
     else:
         pomocnoBrisanje(0, 1, 0, 1, listaZidova, graf, m, n)
@@ -312,7 +311,7 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
             pomocnoBrisanje(0, 1, 0, 2, listaZidova, graf, m, n)
             pomocnoBrisanje(0, 2, 0, 1, listaZidova, graf, m, n)
 
-            #DA LI POSTOJI GORNJI LEVI ZID
+            # DA LI POSTOJI GORNJI LEVI ZID
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0])
@@ -325,7 +324,7 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         if not ProveriDaLiPostojiVeza(graf, novaListaZidova4, m, n):
             pomocnoBrisanje(0, 0, 0, -1, listaZidova, graf, m, n)
 
-            #DA LI POSTOJI GORNJI DESNI ZID
+            # DA LI POSTOJI GORNJI DESNI ZID
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0])
@@ -338,12 +337,12 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         if not ProveriDaLiPostojiVeza(graf, novaListaZidova4, m, n):
             pomocnoBrisanje(0, +1, 0, +2, listaZidova, graf, m, n)
 
-            #DA LI POSTOJI DONJI LEVI ZID
+            # DA LI POSTOJI DONJI LEVI ZID
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0]) + 1
         x12 = int(x1[1]) - 1
-        y11 = int(y1[0]) 
+        y11 = int(y1[0])
         y12 = int(y1[1])
         novaListaZidova4 = [(str(x11)+","+str(x12), str(y11)+","+str(y12))]
 
@@ -351,7 +350,7 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         if not ProveriDaLiPostojiVeza(graf, novaListaZidova4, m, n):
             pomocnoBrisanje(0, -1, 0, 0, listaZidova, graf, m, n)
 
-            #DA LI POSTOJI DONJI DESNI ZID
+            # DA LI POSTOJI DONJI DESNI ZID
         x1 = list(listaZidova[0][0].split(","))
         y1 = list(listaZidova[0][1].split(","))
         x11 = int(x1[0]) + 1
@@ -376,7 +375,6 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         #     pomocnoBrisanje(0, 0, 0, -1, listaZidova, graf, m, n)
         #     pomocnoBrisanje(0, -1, 0, 0, listaZidova, graf, m, n)
 
-
     return True
 
 
@@ -389,12 +387,12 @@ def ProveriDaLiPostojiVeza(graf, listaZidova, m, n):
         or 0 >= int(y1[0])
         or 0 >= int(y1[1])
     ):
-        return True #VRACAMO TRUE - KAO DA POSTOJE ZIDOVI, DA SE NE BI IZVRSILA FUNKCIJA POMOCNOBRISANJE JER JE GRANICNI SLUCAJ
+        return True  # VRACAMO TRUE - KAO DA POSTOJE ZIDOVI, DA SE NE BI IZVRSILA FUNKCIJA POMOCNOBRISANJE JER JE GRANICNI SLUCAJ
     if (
-       m+1 == int(x1[0])
-        or n+1 == int(x1[1])
-        or m+1 == int(y1[0])
-        or n+1 == int(y1[1])
+       m+1 <= int(x1[0])
+        or n+1 <= int(x1[1])
+        or m+1 <= int(y1[0])
+        or n+1 <= int(y1[1])
        ):
         return True  # VRACAMO TRUE - KAO DA POSTOJE ZIDOVI, DA SE NE BI IZVRSILA FUNKCIJA POMOCNOBRISANJE JER JE GRANICNI SLUCAJ
     # if graf[x1].contains(y1)
@@ -413,17 +411,17 @@ def pomocnoBrisanje(a, b, c, d, listaZidova, graf, m, n):  # zeljko
     y1[1] = int(y1[1]) + d
     novaLista = (str(x1[0]) + "," + str(x1[1]), str(y1[0]) + "," + str(y1[1]))
     if (
-        0 == int(novaLista[0].split(",")[0])
-        or 0 == int(novaLista[0].split(",")[1])
-        or 0 == int(novaLista[1].split(",")[0])
-        or 0 == int(novaLista[1].split(",")[1])
+        0 >= int(novaLista[0].split(",")[0])
+        or 0 >= int(novaLista[0].split(",")[1])
+        or 0 >= int(novaLista[1].split(",")[0])
+        or 0 >= int(novaLista[1].split(",")[1])
     ):
         return
     if (
-        n + 1 == int(novaLista[0].split(",")[0])
-        or m + 1 == int(novaLista[0].split(",")[1])
-        or n + 1 == int(novaLista[1].split(",")[0])
-        or m + 1 == int(novaLista[1].split(",")[1])
+        m + 1 <= int(novaLista[0].split(",")[0])
+        or n + 1 <= int(novaLista[0].split(",")[1])
+        or m + 1 <= int(novaLista[1].split(",")[0])
+        or n + 1 <= int(novaLista[1].split(",")[1])
     ):
         return
     obrisi([novaLista], graf, m, n)
@@ -458,17 +456,15 @@ def pomeriIGraca(
     x1 = startPoz.split(",")[0]
     y1 = startPoz.split(",")[1]
     if (
-            0 >= int(x1)
-            or 0 >= int(y1)
-        ):
-            return (False, False)
+        0 >= int(x1)
+        or 0 >= int(y1)
+    ):
+        return (False, False)
     if (
-        m+1 <= int(x1)
-            or n+1 <= int(y1)
-        ):
-            return (False, False)
-
-
+            m+1 <= int(x1)
+        or n+1 <= int(y1)
+    ):
+        return (False, False)
 
     igrac = graf[startPoz][0]
     if igrac != naPotezu:
@@ -492,7 +488,7 @@ def pomeriIGraca(
                 pobeda = True
             graf[startPoz] = (0, graf[startPoz][1])
             graf[endPoz] = (igrac, graf[endPoz][1])
-            proveriPrelazakPrekoPobednickePozicije(graf, px1, px2, py1, py2)     
+            proveriPrelazakPrekoPobednickePozicije(graf, px1, px2, py1, py2)
 
     else:
         ValidiranPokret = False
@@ -502,7 +498,7 @@ def pomeriIGraca(
 
 def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz, px1, px2, py1, py2):  # filip
 
-    #PROVERA DA LI JE SKOK NA POLJE SA FIGUROM
+    # PROVERA DA LI JE SKOK NA POLJE SA FIGUROM
     if graf[endpoz][0] == "x" or graf[endpoz][0] == "y":
         if not (endpoz == px1 or endpoz == px2 or endpoz == py1 or endpoz == py2):
             return False
@@ -512,14 +508,12 @@ def validacijaPokreta(graf, trenutno, ciljno, endpoz, startPoz, px1, px2, py1, p
 
         if p == ciljno:
             for node in graf[startPoz][1]:
-                if node == endpoz: #Ako ne postoji zid, proverava se da li postoji veza izmedju startPoz i endPoz
+                if node == endpoz:  # Ako ne postoji zid, proverava se da li postoji veza izmedju startPoz i endPoz
                     if endpoz == px1 or endpoz == px2 or endpoz == py1 or endpoz == py2:
                         return True
 
-
     if graf[endpoz][0] == "x" or graf[endpoz][0] == "y":
         return False
-
 
     for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
         g = (trenutno[0] + dx, trenutno[1] + dy)
@@ -726,7 +720,7 @@ def generisiSvaMogucaStanja(graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py
         )
         return []
     listaStanja = []
-    
+
     startPozInt = (int(startPoz.split(",")[0]), int(startPoz.split(",")[1]))
     for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
         g = (startPozInt[0] + dx, startPozInt[1] + dy)
@@ -755,7 +749,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
     if igrac != naPotezu:
         return (False, False, False)
     PovratnaVrednost = VratiBrojKorakaDoCilja(
-        graf, m, n, naPotezu, px1, px2, py1, py2) #OVAJ POZIV VRACA BROJ KORAKA DO CILJA KOMPJUTERA
+        graf, m, n, naPotezu, px1, px2, py1, py2)  # OVAJ POZIV VRACA BROJ KORAKA DO CILJA KOMPJUTERA
     IzabranaFigura = PovratnaVrednost[0]
     minBrKorakaDoCilja = PovratnaVrednost[1]
 
@@ -778,10 +772,10 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
                 pobeda = True
             noviGraf[startPoz] = (0, noviGraf[startPoz][1])
             noviGraf[endPoz] = (igrac, noviGraf[endPoz][1])
-            proveriPrelazakPrekoPobednickePozicije(noviGraf, px1, px2, py1, py2)     
+            proveriPrelazakPrekoPobednickePozicije(
+                noviGraf, px1, px2, py1, py2)
 
-
-            if( minBrKorakaDoCilja == 1 and pobeda):
+            if(minBrKorakaDoCilja == 1 and pobeda):
                 return (pobeda, [noviGraf], ValidiranPokret)
             minBrKorakaDoCiljaNovogGrafa = VratiBrojKorakaDoCilja(
                 noviGraf, m, n, naPotezu, px1, px2, py1, py2)[1]
@@ -797,16 +791,16 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
         return (pobeda, [noviGraf], ValidiranPokret)
     listaGrafova = []
 
-    global IgracVertikalniZidovi 
-    global IgracHorizontalniZidovi 
-    global KompjuterVertikalniZidovi 
-    global KompjuterHorizontalniZidovi 
+    global IgracVertikalniZidovi
+    global IgracHorizontalniZidovi
+    global KompjuterVertikalniZidovi
+    global KompjuterHorizontalniZidovi
 
     if naPotezu == "x":
         if IgracHorizontalniZidovi == 0 and IgracVertikalniZidovi == 0:
             return (pobeda, [noviGraf], ValidiranPokret)
     else:
-        if KompjuterVertikalniZidovi == 0 and KompjuterHorizontalniZidovi == 0: 
+        if KompjuterVertikalniZidovi == 0 and KompjuterHorizontalniZidovi == 0:
             return (pobeda, [noviGraf], ValidiranPokret)
 
 ############################################################################
@@ -857,10 +851,14 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
         IzabranoCiljnox = IzabranoCiljno.split(",")[0]
         IzabranoCiljnoy = IzabranoCiljno.split(",")[1]
 
-        minX = int(IzabranaYx if IzabranaYx < IzabranoCiljnox else IzabranoCiljnox)
-        minY = int(IzabranaYy if IzabranaYy < IzabranoCiljnoy else IzabranoCiljnoy)
-        maxX = int(IzabranaYx if IzabranaYx > IzabranoCiljnox else IzabranoCiljnox)
-        maxY = int(IzabranaYy if IzabranaYy > IzabranoCiljnoy else IzabranoCiljnoy)
+        minX = int(IzabranaYx if IzabranaYx <
+                   IzabranoCiljnox else IzabranoCiljnox)
+        minY = int(IzabranaYy if IzabranaYy <
+                   IzabranoCiljnoy else IzabranoCiljnoy)
+        maxX = int(IzabranaYx if IzabranaYx >
+                   IzabranoCiljnox else IzabranoCiljnox)
+        maxY = int(IzabranaYy if IzabranaYy >
+                   IzabranoCiljnoy else IzabranoCiljnoy)
 
     else:
         tmpNaPotezu = "x"
@@ -898,10 +896,14 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
         IzabranoCiljnox = IzabranoCiljno.split(",")[0]
         IzabranoCiljnoy = IzabranoCiljno.split(",")[1]
 
-        minX = int(IzabranaXx if IzabranaXx < IzabranoCiljnox else IzabranoCiljnox)
-        minY = int(IzabranaXy if IzabranaXy < IzabranoCiljnoy else IzabranoCiljnoy)
-        maxX = int(IzabranaXx if IzabranaXx > IzabranoCiljnox else IzabranoCiljnox)
-        maxY = int(IzabranaXy if IzabranaXy > IzabranoCiljnoy else IzabranoCiljnoy)
+        minX = int(IzabranaXx if IzabranaXx <
+                   IzabranoCiljnox else IzabranoCiljnox)
+        minY = int(IzabranaXy if IzabranaXy <
+                   IzabranoCiljnoy else IzabranoCiljnoy)
+        maxX = int(IzabranaXx if IzabranaXx >
+                   IzabranoCiljnox else IzabranoCiljnox)
+        maxY = int(IzabranaXy if IzabranaXy >
+                   IzabranoCiljnoy else IzabranoCiljnoy)
     dodatak = 1
     if minX > 2:
         minX = minX - dodatak
@@ -921,7 +923,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
 
     if naPotezu == "x":
         if IgracHorizontalniZidovi != 0:
-            #horizontalni zidovi
+            # horizontalni zidovi
             for i in range(int(minX), int(maxX)):
                 for j in range(int(minY), int(maxY)):
                     novinoviGraf = noviGraf.copy()
@@ -933,7 +935,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
                             brKorakaDoCiljaNovogNovogGrafa = VratiBrojKorakaDoCilja(
                                 novinoviGraf, m, n, tmpNaPotezu, px1, px2, py1, py2)[1]
                             if(minPovratnaVrednost < brKorakaDoCiljaNovogNovogGrafa):
-                                #stampajGraf(novinoviGraf,m,n)
+                                # stampajGraf(novinoviGraf,m,n)
                                 listaGrafova.append(novinoviGraf)
         if IgracVertikalniZidovi != 0:
             # vertikalni zidovi
@@ -955,7 +957,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
         if KompjuterHorizontalniZidovi <= 0:
             a = 10
         if KompjuterHorizontalniZidovi > 0:
-            #horizontalni zidovi
+            # horizontalni zidovi
             for i in range(int(minX), int(maxX)):
                 for j in range(int(minY), int(maxY)):
                     novinoviGraf = noviGraf.copy()
@@ -967,7 +969,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
                             brKorakaDoCiljaNovogNovogGrafa = VratiBrojKorakaDoCilja(
                                 novinoviGraf, m, n, tmpNaPotezu, px1, px2, py1, py2)[1]
                             if(minPovratnaVrednost < brKorakaDoCiljaNovogNovogGrafa):
-                                #stampajGraf(novinoviGraf,m,n)
+                                # stampajGraf(novinoviGraf,m,n)
                                 listaGrafova.append(novinoviGraf)
         if KompjuterVertikalniZidovi <= 0:
             a = 10
@@ -1037,8 +1039,8 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
             IzabranoPoz2x = poz2.split(",")[0]
             IzabranoPoz2y = poz2.split(",")[1]
 
-        #GENERISANJE ZIDOVA OKO POBEDNICKIH POLJA
-        for K in range(0,2):
+        # GENERISANJE ZIDOVA OKO POBEDNICKIH POLJA
+        for K in range(0, 2):
             if K == 0:
                 minX = int(IzabranaPoz1x)
                 maxX = int(IzabranaPoz1x)
@@ -1082,33 +1084,35 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
                                     listaGrafova.append(novinoviGraf)
                                     flag = False
 
-        #GENERISANJE RANDOM ZIDA NA TABLI
+        # GENERISANJE RANDOM ZIDA NA TABLI
         while flag:
             i = int(random.randint(1, m - 1))
             j = int(random.randint(1, n - 1))
             novinoviGraf = noviGraf.copy()
             if KompjuterVertikalniZidovi > 0:
-                listaZidova = [(str(i) + "," + str(j), str(i) + "," + str(j + 1))]
+                listaZidova = [
+                    (str(i) + "," + str(j), str(i) + "," + str(j + 1))]
                 if unesiZidove(novinoviGraf, listaZidova, m, n):
-                                # stampajGraf(novinoviGraf, m, n)
-                                if NotClosedPath([px1, px2, py1, py2], novinoviGraf):
-                                    listaGrafova.append(novinoviGraf)
-                                    pobeda = True   
-                                    flag = False 
+                    # stampajGraf(novinoviGraf, m, n)
+                    if NotClosedPath([px1, px2, py1, py2], novinoviGraf):
+                        listaGrafova.append(novinoviGraf)
+                        pobeda = True
+                        flag = False
             elif KompjuterHorizontalniZidovi > 0:
-                    listaZidova = [(str(i) + "," + str(j), str(i + 1) + "," + str(j))]
-                    if unesiZidove(novinoviGraf, listaZidova, m, n):
-                                # stampajGraf(novinoviGraf, m, n)
-                                if NotClosedPath([px1, px2, py1, py2], novinoviGraf):
-                                    listaGrafova.append(novinoviGraf)
-                                    pobeda = True
-                                    flag = False
+                listaZidova = [
+                    (str(i) + "," + str(j), str(i + 1) + "," + str(j))]
+                if unesiZidove(novinoviGraf, listaZidova, m, n):
+                    # stampajGraf(novinoviGraf, m, n)
+                    if NotClosedPath([px1, px2, py1, py2], novinoviGraf):
+                        listaGrafova.append(novinoviGraf)
+                        pobeda = True
+                        flag = False
             else:
-                flag = False 
-
+                flag = False
 
     ret = (pobeda, listaGrafova, ValidiranPokret)
     return ret
+
 
 def generisiSvaLogicnaStanja(
     graf, m, n, startPoz, naPotezu, pobeda, px1, px2, py1, py2, BrojZidova
@@ -1122,7 +1126,7 @@ def generisiSvaLogicnaStanja(
 
     if pobeda:
         return [pobeda, [graf]]
-   
+
     startPozInt = (int(startPoz.split(",")[0]), int(startPoz.split(",")[1]))
     for tx, ty in zip([1, 0, -1, 0], [0, 1, 0, -1]):
         g = (startPozInt[0] + tx, startPozInt[1] + ty)
@@ -1141,14 +1145,15 @@ def generisiSvaLogicnaStanja(
             )
             if ValidiranPokret:
                 for mogucPotez in graf[startPoz][1]:
-                    if stringG == mogucPotez: #Ako ne postoji zid, proverava se da li postoji veza izmedju startPoz i endPoz
+                    if stringG == mogucPotez:  # Ako ne postoji zid, proverava se da li postoji veza izmedju startPoz i endPoz
                         if stringG == px1 or stringG == px2 or stringG == py1 or stringG == py2:
                             if (stringG == px1 or stringG == px2) and naPotezu == "x":
                                 pobeda = True
                             elif (stringG == py1 or stringG == py2) and naPotezu == "y":
                                 pobeda = True
                             noviGraf[startPoz] = (0, noviGraf[startPoz][1])
-                            noviGraf[stringG] = (naPotezu, noviGraf[stringG][1])
+                            noviGraf[stringG] = (
+                                naPotezu, noviGraf[stringG][1])
                             proveriPrelazakPrekoPobednickePozicije(
                                 noviGraf, px1, px2, py1, py2)
 
@@ -1259,7 +1264,7 @@ def minMax(
 
     startPoz = pozicijePijuna(graph, px1, px2, py1, py2)
     if depth == 1:
-        a =10
+        a = 10
     if maximizing_player:
         Pov = generisiSvaLogicnaStanja(
             graph, m, n, startPoz[0], naPotezu, pobeda, px1, px2, py1, py2, BrojZidova
@@ -1283,8 +1288,8 @@ def minMax(
         if pobeda == False:
             pobeda = Pov[0]
         Pov = generisiSvaLogicnaStanja(
-                graph, m, n, startPoz[3], naPotezu, pobeda, px1, px2, py1, py2, BrojZidova
-            )
+            graph, m, n, startPoz[3], naPotezu, pobeda, px1, px2, py1, py2, BrojZidova
+        )
         children.append(
             Pov[1]
         )
@@ -1359,7 +1364,7 @@ def gameLoop():  # filip
     NaPotezuFlag = True
     while NaPotezuFlag:
         print("Unesite ko igra prvi (x/y): ")
-        NaPotezu = str(input()) 
+        NaPotezu = str(input())
         if NaPotezu == 'x' or NaPotezu == 'y':
             NaPotezuFlag = False
         else:
@@ -1377,13 +1382,13 @@ def gameLoop():  # filip
         else:
             ZidoviFlag = False
 
-    global IgracVertikalniZidovi 
+    global IgracVertikalniZidovi
     IgracVertikalniZidovi = int(BrojZidova)
-    global IgracHorizontalniZidovi 
+    global IgracHorizontalniZidovi
     IgracHorizontalniZidovi = int(BrojZidova)
-    global KompjuterVertikalniZidovi 
+    global KompjuterVertikalniZidovi
     KompjuterVertikalniZidovi = int(BrojZidova)
-    global KompjuterHorizontalniZidovi 
+    global KompjuterHorizontalniZidovi
     KompjuterHorizontalniZidovi = int(BrojZidova)
 
     pobeda = False
@@ -1417,7 +1422,8 @@ def gameLoop():  # filip
     pobedaB2 = f"{A2x},{A2y}"
 
     graf = SetujPocetnoStanje(
-        M, N, [pobedaB1, pobedaB2, pobedaA1, pobedaA2], pobedaA1, pobedaA2, pobedaB1, pobedaB2
+        M, N, [pobedaB1, pobedaB2, pobedaA1,
+               pobedaA2], pobedaA1, pobedaA2, pobedaB1, pobedaB2
     )
     stampajGraf(graf, M, N)
 
@@ -1482,13 +1488,13 @@ def gameLoop():  # filip
                 graf = grafCopy
                 print(f"Nepravilno kretanje, na potezu je {trenutniIgrac}!")
                 continue
-            
+
             if IgracHorizontalniZidovi > 0 or IgracVertikalniZidovi > 0:
                 listaZidova = [(zid1, zid2)]
                 v_h = listaZidova[0][0].split(
-                ",")[0] == listaZidova[0][1].split(",")[0]
+                    ",")[0] == listaZidova[0][1].split(",")[0]
 
-                if v_h: #PROVERA ZA VERTIKALNE ZIDOVE
+                if v_h:  # PROVERA ZA VERTIKALNE ZIDOVE
                     if IgracVertikalniZidovi > 0:
                         validanZid = unesiZidove(graf, listaZidova, M, N)
                         if not validanZid:
@@ -1505,10 +1511,12 @@ def gameLoop():  # filip
                     else:
                         graf = grafCopy
                         print(
-                                "Nemate dovoljno vertikalnih zidova, imate "+str(IgracHorizontalniZidovi)+" horizontalnih zidova"
-                            )
+                            "Nemate dovoljno vertikalnih zidova, imate " +
+                            str(IgracHorizontalniZidovi) +
+                            " horizontalnih zidova"
+                        )
                         continue
-                else: # PROVERA ZA HORIZONTALNE ZIDOVE 
+                else:  # PROVERA ZA HORIZONTALNE ZIDOVE
                     if IgracHorizontalniZidovi > 0:
                         validanZid = unesiZidove(graf, listaZidova, M, N)
                         if not validanZid:
@@ -1525,51 +1533,51 @@ def gameLoop():  # filip
                     else:
                         graf = grafCopy
                         print(
-                                "Nemate dovoljno horizontalnih zidova, imate "+str(IgracVertikalniZidovi)+" vertikalnih zidova"
-                            )
+                            "Nemate dovoljno horizontalnih zidova, imate " +
+                            str(IgracVertikalniZidovi)+" vertikalnih zidova"
+                        )
                         continue
-
 
             if proveriPobednika(pobedaPravilnoTuple):
                 break
-    
+
             trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
         else:
             stariGraf = graf.copy()
             if KompjuterHorizontalniZidovi != 0 or KompjuterVertikalniZidovi != 0:
                 graf = minMax(
-                        graf,
-                        1,
-                        -math.inf,
-                        math.inf,
-                        False,
-                        "y",
-                        M,
-                        N,
-                        pobeda,
-                        pobedaA1,
-                        pobedaA2,
-                        pobedaB1,
-                        pobedaB2,
-                        BrojZidova
-                    )[0]
+                    graf,
+                    1,
+                    -math.inf,
+                    math.inf,
+                    False,
+                    "y",
+                    M,
+                    N,
+                    pobeda,
+                    pobedaA1,
+                    pobedaA2,
+                    pobedaB1,
+                    pobedaB2,
+                    BrojZidova
+                )[0]
             else:
-                    graf = minMax(
-                        graf,
-                        3,
-                        -math.inf,
-                        math.inf,
-                        False,
-                        "y",
-                        M,
-                        N,
-                        pobeda,
-                        pobedaA1,
-                        pobedaA2,
-                        pobedaB1,
-                        pobedaB2,
-                        BrojZidova
-                    )[0]
+                graf = minMax(
+                    graf,
+                    3,
+                    -math.inf,
+                    math.inf,
+                    False,
+                    "y",
+                    M,
+                    N,
+                    pobeda,
+                    pobedaA1,
+                    pobedaA2,
+                    pobedaB1,
+                    pobedaB2,
+                    BrojZidova
+                )[0]
 
             if graf[pobedaA1][0] != 0:
                 if graf[pobedaA1][0] == "x":
@@ -1583,16 +1591,17 @@ def gameLoop():  # filip
             if graf[pobedaB2][0] != 0:
                 if graf[pobedaB2][0] == "y":
                     break
-            if KompjuterHorizontalniZidovi > 0 or KompjuterVertikalniZidovi > 0:        
+            if KompjuterHorizontalniZidovi > 0 or KompjuterVertikalniZidovi > 0:
                 v_h = VratiTipPoslednjeUnetogZida(stariGraf, graf)
                 if v_h:
                     KompjuterVertikalniZidovi -= 1
                 else:
                     KompjuterHorizontalniZidovi -= 1
-            
+
             trenutniIgrac = "x" if trenutniIgrac == "y" else "y"
 
-        proveriPrelazakPrekoPobednickePozicije(graf, pobedaA1, pobedaA2, pobedaB1, pobedaB2)     
+        proveriPrelazakPrekoPobednickePozicije(
+            graf, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
         stampajGraf(graf, M, N)
 
     print("Pobednik je : x" if trenutniIgrac == "x" else "Pobednik je : y")
@@ -1600,14 +1609,15 @@ def gameLoop():  # filip
 
 
 def proveriPrelazakPrekoPobednickePozicije(graf, pobedaA1, pobedaA2, pobedaB1, pobedaB2):
-        if(graf[pobedaA1][0] == 0):
-            graf[pobedaA1] = ('a', graf[pobedaA1][1])
-        if(graf[pobedaA2][0] == 0):
-            graf[pobedaA2] = ('a', graf[pobedaA2][1])
-        if(graf[pobedaB1][0] == 0):
-            graf[pobedaB1] = ('b', graf[pobedaB1][1])
-        if(graf[pobedaB2][0] == 0):
-            graf[pobedaB2] = ('b', graf[pobedaB2][1])
+    if(graf[pobedaA1][0] == 0):
+        graf[pobedaA1] = ('a', graf[pobedaA1][1])
+    if(graf[pobedaA2][0] == 0):
+        graf[pobedaA2] = ('a', graf[pobedaA2][1])
+    if(graf[pobedaB1][0] == 0):
+        graf[pobedaB1] = ('b', graf[pobedaB1][1])
+    if(graf[pobedaB2][0] == 0):
+        graf[pobedaB2] = ('b', graf[pobedaB2][1])
+
 
 def VratiBrojKorakaDoCilja(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2):
     # stampajGraf(graf,m,n)
@@ -1687,7 +1697,7 @@ def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, 
     if naPotezu == "x":
         if startPoz[2] == pobedaB1 or startPoz[2] == pobedaB2 or startPoz[3] == pobedaB1 or startPoz[3] == pobedaB2:
             return 1
-        if startPoz[0] == IzabranaFigura: 
+        if startPoz[0] == IzabranaFigura:
             povratnaVr = bestSearch(graf, m, n, startPoz[0], pobedaA1)
             if povratnaVr > 0:
                 if povratnaVr < MinPovratnaVrednost:
@@ -1708,7 +1718,7 @@ def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, 
             povratnaVr = bestSearch(graf, m, n, startPoz[1], pobedaA2)
             if povratnaVr > 0:
                 if povratnaVr < MinPovratnaVrednost:
-                        MinPovratnaVrednost = povratnaVr
+                    MinPovratnaVrednost = povratnaVr
             if MinPovratnaVrednost > minBrojKorakaDoCilja:
                 return True
     else:
@@ -1719,7 +1729,7 @@ def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, 
             povratnaVr = bestSearch(graf, m, n, startPoz[2], pobedaB1)
             if povratnaVr > 0:
                 if povratnaVr < MinPovratnaVrednost:
-                        MinPovratnaVrednost = povratnaVr
+                    MinPovratnaVrednost = povratnaVr
                 povratnaVr = bestSearch(graf, m, n, startPoz[2], pobedaB2)
                 if povratnaVr > 0:
                     if povratnaVr < MinPovratnaVrednost:
@@ -1736,7 +1746,7 @@ def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, 
                 povratnaVr = bestSearch(graf, m, n, startPoz[3], pobedaB2)
                 if povratnaVr > 0:
                     if povratnaVr < MinPovratnaVrednost:
-                            MinPovratnaVrednost = povratnaVr
+                        MinPovratnaVrednost = povratnaVr
                 if MinPovratnaVrednost > minBrojKorakaDoCilja:
                     return True
 
@@ -1867,8 +1877,8 @@ def bestSearch(graf, m, n, start, goal):
                 )
                 if ValidiranPokret:
                     for mogucPotez in graf[node[1]][1]:
-                        if stringG == mogucPotez: #Ako ne postoji zid, proverava se da li postoji veza izmedju startPoz i endPoz
-                            if stringG == pobedaPozicije[0] or stringG == pobedaPozicije[1] or stringG == pobedaPozicije[2] or stringG == pobedaPozicije[3]:                            
+                        if stringG == mogucPotez:  # Ako ne postoji zid, proverava se da li postoji veza izmedju startPoz i endPoz
+                            if stringG == pobedaPozicije[0] or stringG == pobedaPozicije[1] or stringG == pobedaPozicije[2] or stringG == pobedaPozicije[3]:
                                 if goal == stringG:
                                     previous[stringG] = node[1]
                                     found = True
@@ -1876,7 +1886,7 @@ def bestSearch(graf, m, n, start, goal):
             if found:
                 break
         if found:
-           break
+            break
         listaPoteza = []
         startPozInt = (int(node[1].split(",")[0]), int(node[1].split(",")[1]))
         for dx, dy in zip([2, -2, 0, 0], [0, 0, 2, -2]):
@@ -1897,7 +1907,8 @@ def bestSearch(graf, m, n, start, goal):
                 if stringG == goal:
                     a = 10
                 ValidiranPokret = validacijaPokreta(
-                    noviGraf, startPozInt, endPozInt, stringG, node[1], pobedaPozicije[0], pobedaPozicije[1], pobedaPozicije[2], pobedaPozicije[3]
+                    noviGraf, startPozInt, endPozInt, stringG, node[1], pobedaPozicije[
+                        0], pobedaPozicije[1], pobedaPozicije[2], pobedaPozicije[3]
                 )
                 if ValidiranPokret:
                     listaPoteza.append(stringG)
@@ -1946,6 +1957,7 @@ def bestSearch(graf, m, n, start, goal):
     # else:
     return len(path) - 1  # Oduzimamo pocetnu i krajnju tacku
 
+
 def VratiTipPoslednjeUnetogZida(stariGraf, noviGraf):
     global M
     global N
@@ -1959,7 +1971,7 @@ def VratiTipPoslednjeUnetogZida(stariGraf, noviGraf):
         if(collections.Counter(lista1) != collections.Counter(lista2)):
             unmatched = list(lista1)
             for element in lista2:
-                    unmatched.remove(element)
+                unmatched.remove(element)
             listaZidova += unmatched
 
     redukovanaLista = list(dict.fromkeys(listaZidova))
@@ -1977,12 +1989,11 @@ def VratiTipPoslednjeUnetogZida(stariGraf, noviGraf):
             goreLevo = i
             break
 
-
     listaZidova = []
     Kopija3 = stariGraf.copy()
     Kopija4 = noviGraf.copy()
     if goreLevo == '':
-        a=10
+        a = 10
         return None
 
     lista1 = Kopija1[goreLevo][1]
@@ -1992,7 +2003,6 @@ def VratiTipPoslednjeUnetogZida(stariGraf, noviGraf):
         for element in lista2:
             unmatched.remove(element)
         listaZidova += unmatched
-
 
     x1 = goreLevo.split(",")
     y1 = goreLevo.split(",")
@@ -2014,7 +2024,6 @@ def heuristikaZaTrazenjeputa(tacka1, tacka2):
     return math.sqrt(
         pow(x1 - x2, 2) + pow(y1 - y2, 2)
     )  # Ovo vraca udaljenost dva cvora i koristi se kao heuristika u trazenju najkraceg puta
-
 
 
 MainFlag = True
