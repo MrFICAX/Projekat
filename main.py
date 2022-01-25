@@ -86,6 +86,8 @@ def generisiGraf(
 
 def unesiZidove(graf, listaZidova, m, n):  # zeljko
 
+    v_h = listaZidova[0][0].split(",")[0] == listaZidova[0][1].split(",")[0]
+
     x1 = list(listaZidova[0][0].split(","))
     y1 = list(listaZidova[0][1].split(","))
     if (
@@ -95,18 +97,26 @@ def unesiZidove(graf, listaZidova, m, n):  # zeljko
         or 0 >= int(y1[1])
     ):
         return False
-    if (
-       m+1 <= int(x1[0])
-        or n+1 <= int(x1[1])
-        or m+1 <= int(y1[0])
-        or n+1 <= int(y1[1])
-       ):
-        return False
+    if v_h:
+        if (
+        m+1 <= int(x1[0])
+            or n+1 <= int(x1[1])
+            or m+1 <= int(y1[0])
+            or n+1 <= int(y1[1])
+        ):
+            return False
+    else:
+        if (
+            m <= int(x1[0])
+            or n <= int(x1[1])
+            or m <= int(y1[0])
+            or n <= int(y1[1])
+        ):
+            return False
 
     if listaZidova[0][0].split(",")[0] == listaZidova[0][1].split(",")[0] and listaZidova[0][0].split(",")[1] == listaZidova[0][1].split(",")[1]:
         return False
 
-    v_h = listaZidova[0][0].split(",")[0] == listaZidova[0][1].split(",")[0]
     if listaZidova[0][1] not in graf[listaZidova[0][0]][1]:
         if listaZidova[0][0] not in graf[listaZidova[0][1]][1]:
             return False
@@ -904,7 +914,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
                    IzabranoCiljnox else IzabranoCiljnox)
         maxY = int(IzabranaXy if IzabranaXy >
                    IzabranoCiljnoy else IzabranoCiljnoy)
-    dodatak = 1
+    dodatak = 2
     if minX > 2:
         minX = minX - dodatak
     if minY > 2:
@@ -1038,15 +1048,17 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
             IzabranaPoz1y = poz1.split(",")[1]
             IzabranoPoz2x = poz2.split(",")[0]
             IzabranoPoz2y = poz2.split(",")[1]
-
+        tmpPozicija = ""
         # GENERISANJE ZIDOVA OKO POBEDNICKIH POLJA
         for K in range(0, 2):
             if K == 0:
+                tmpPozicija = poz1
                 minX = int(IzabranaPoz1x)
                 maxX = int(IzabranaPoz1x)
                 minY = int(IzabranaPoz1y)
                 maxY = int(IzabranaPoz1y)
             else:
+                tmpPozicija = poz1
                 minX = int(IzabranoPoz2x)
                 maxX = int(IzabranoPoz2x)
                 minY = int(IzabranoPoz2y)
@@ -1070,7 +1082,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
                         ):
                             # stampajGraf(novinoviGraf, m, n)
                             if NotClosedPath([px1, px2, py1, py2], novinoviGraf):
-                                if(VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(novinoviGraf, m, n, tmpNaPotezu, px1, px2, py1, py2, minPovratnaVrednost, IzabranaX if IzabranaX != None else IzabranaY)):
+                                if(VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(novinoviGraf, m, n, tmpNaPotezu, px1, px2, py1, py2, minPovratnaVrednost, IzabranaX if IzabranaX != None else IzabranaY, tmpPozicija)):
                                     listaGrafova.append(novinoviGraf)
                                     flag = False
                     if KompjuterHorizontalniZidovi > 0:
@@ -1080,7 +1092,7 @@ def generisiLogicnaStanjaZaUlazniPotezPijuna(
                                 (str(i) + "," + str(j), str(i + 1) + "," + str(j))], m, n
                         ):
                             if NotClosedPath([px1, px2, py1, py2], novinoviGraf):
-                                if(VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(novinoviGraf, m, n, tmpNaPotezu, px1, px2, py1, py2, minPovratnaVrednost, IzabranaX if IzabranaX != None else IzabranaY)):
+                                if(VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(novinoviGraf, m, n, tmpNaPotezu, px1, px2, py1, py2, minPovratnaVrednost, IzabranaX if IzabranaX != None else IzabranaY, tmpPozicija)):
                                     listaGrafova.append(novinoviGraf)
                                     flag = False
 
@@ -1687,7 +1699,7 @@ def VratiBrojKorakaDoCilja(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, p
     return (IzabranaFigura, minBrKorakaDoCilja)
 
 
-def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2, minBrojKorakaDoCilja, IzabranaFigura):
+def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2, minBrojKorakaDoCilja, IzabranaFigura, IzabranaPozicija):
     # stampajGraf(graf,m,n)
     startPoz = pozicijePijuna(graf, pobedaA1, pobedaA2, pobedaB1, pobedaB2)
     tmpMinBrojKoraka = 1000
@@ -1698,27 +1710,30 @@ def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, 
         if startPoz[2] == pobedaB1 or startPoz[2] == pobedaB2 or startPoz[3] == pobedaB1 or startPoz[3] == pobedaB2:
             return 1
         if startPoz[0] == IzabranaFigura:
-            povratnaVr = bestSearch(graf, m, n, startPoz[0], pobedaA1)
-            if povratnaVr > 0:
-                if povratnaVr < MinPovratnaVrednost:
-                    MinPovratnaVrednost = povratnaVr
-            povratnaVr = bestSearch(graf, m, n, startPoz[0], pobedaA2)
-            if povratnaVr > 0:
-                if povratnaVr < MinPovratnaVrednost:
-                    MinPovratnaVrednost = povratnaVr
+            if IzabranaPozicija == pobedaA1:
+                povratnaVr = bestSearch(graf, m, n, startPoz[0], pobedaA1)
+                if povratnaVr > 0:
+                    if povratnaVr < MinPovratnaVrednost:
+                        MinPovratnaVrednost = povratnaVr
+            else:
+                povratnaVr = bestSearch(graf, m, n, startPoz[0], pobedaA2)
+                if povratnaVr > 0:
+                    if povratnaVr < MinPovratnaVrednost:
+                        MinPovratnaVrednost = povratnaVr
 
             if MinPovratnaVrednost > minBrojKorakaDoCilja:
                 return True
         elif startPoz[1] == IzabranaFigura:
-            povratnaVr = bestSearch(graf, m, n, startPoz[1], pobedaA1)
-            if povratnaVr > 0:
-                if povratnaVr < MinPovratnaVrednost:
-                    MinPovratnaVrednost = povratnaVr
-
-            povratnaVr = bestSearch(graf, m, n, startPoz[1], pobedaA2)
-            if povratnaVr > 0:
-                if povratnaVr < MinPovratnaVrednost:
-                    MinPovratnaVrednost = povratnaVr
+            if IzabranaPozicija == pobedaA1:
+                povratnaVr = bestSearch(graf, m, n, startPoz[1], pobedaA1)
+                if povratnaVr > 0:
+                    if povratnaVr < MinPovratnaVrednost:
+                        MinPovratnaVrednost = povratnaVr
+            else:
+                povratnaVr = bestSearch(graf, m, n, startPoz[1], pobedaA2)
+                if povratnaVr > 0:
+                    if povratnaVr < MinPovratnaVrednost:
+                        MinPovratnaVrednost = povratnaVr
             if MinPovratnaVrednost > minBrojKorakaDoCilja:
                 return True
     else:
@@ -1726,29 +1741,32 @@ def VratiAkoBrojKorakaDoCiljaVeciOdProsledjenog(graf, m, n, naPotezu, pobedaA1, 
             return 1
 
         if startPoz[2] == IzabranaFigura:
-            povratnaVr = bestSearch(graf, m, n, startPoz[2], pobedaB1)
-            if povratnaVr > 0:
-                if povratnaVr < MinPovratnaVrednost:
-                    MinPovratnaVrednost = povratnaVr
+            if IzabranaPozicija == pobedaB1:
+                povratnaVr = bestSearch(graf, m, n, startPoz[2], pobedaB1)
+                if povratnaVr > 0:
+                    if povratnaVr < MinPovratnaVrednost:
+                        MinPovratnaVrednost = povratnaVr
+            else:
                 povratnaVr = bestSearch(graf, m, n, startPoz[2], pobedaB2)
                 if povratnaVr > 0:
                     if povratnaVr < MinPovratnaVrednost:
                         MinPovratnaVrednost = povratnaVr
 
-                if MinPovratnaVrednost > minBrojKorakaDoCilja:
-                    return True
-            elif startPoz[3] == IzabranaFigura:
+            if MinPovratnaVrednost > minBrojKorakaDoCilja:
+                return True
+        elif startPoz[3] == IzabranaFigura:
+            if IzabranaPozicija == pobedaB1:
                 povratnaVr = bestSearch(graf, m, n, startPoz[3], pobedaB1)
                 if povratnaVr > 0:
                     if povratnaVr < MinPovratnaVrednost:
                         MinPovratnaVrednost = povratnaVr
-
+            else:
                 povratnaVr = bestSearch(graf, m, n, startPoz[3], pobedaB2)
                 if povratnaVr > 0:
                     if povratnaVr < MinPovratnaVrednost:
                         MinPovratnaVrednost = povratnaVr
-                if MinPovratnaVrednost > minBrojKorakaDoCilja:
-                    return True
+            if MinPovratnaVrednost > minBrojKorakaDoCilja:
+                return True
 
     return False
 
@@ -1759,6 +1777,9 @@ def heuristika(graf, m, n, naPotezu, pobedaA1, pobedaA2, pobedaB1, pobedaB2):
     minBrKorakaDoCiljaProtivnika = 0
     GranicnaHeuristika = 500
     listaNajkracihPuteva = []
+
+    if graf['9,8'][0] == "y":
+        a= 10
     if naPotezu == "x":
         if startPoz[2] == pobedaB1 or startPoz[2] == pobedaB2 or startPoz[3] == pobedaB1 or startPoz[3] == pobedaB2:
             return -GranicnaHeuristika
